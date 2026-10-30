@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "video2scene-lite"
+version = "0.1.0"
+description = "Video-to-scene workbench with editable layouts, object refinement and Blender export"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "numpy>=1.26,<3", "opencv-python>=4.10,<5", "OpenEXR>=3.2,<3.3",
+  "open3d>=0.19,<0.20", "trimesh>=4.6,<5", "scipy>=1.12", "pillow>=10", "jsonschema>=4.23,<5",
+]
+
+[project.optional-dependencies]
+segment = ["ultralytics>=8.3,<9"]
+grounded = ["transformers>=4.57,<5", "huggingface-hub>=0.36,<1", "hydra-core>=1.3,<1.4", "iopath>=0.1.10", "torch>=2.5.1", "torchvision>=0.20.1", "SAM-2 @ git+https://github.com/facebookresearch/sam2.git@2b90b9f5ceec907a1c18123530e92e794ad901a4"]
+dev = ["pytest>=8", "ruff>=0.12", "jsonschema>=4.23,<5"]
+semantic = ["transformers>=4.57,<5", "accelerate>=1.10,<2", "bitsandbytes>=0.48,<0.50"]
+
+[project.scripts]
+video2scene = "video2scene.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["video2scene*"]
+
+[tool.setuptools.package-data]
+video2scene = ["*.html"]
+"video2scene.pi_workflow" = ["web/*.html", "web/*.mjs", "web/*.css"]
+"video2scene.agent_scene" = ["*.html", "*.mjs", "*.css"]
+"video2scene.contracts_v1" = ["v1.schema.json", "examples.json"]
+"video2scene.editor_v1" = ["*.html", "*.mjs", "*.css", "vendor/*", "vendor/three/*", "vendor/three/build/*", "vendor/three/examples/jsm/controls/*", "vendor/three/examples/jsm/loaders/*", "vendor/three/examples/jsm/utils/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

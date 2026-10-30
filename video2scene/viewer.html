@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video2Scene · 三维场景</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef1f5;color:#182d3a;font:14px system-ui,sans-serif}canvas{display:block}aside{position:absolute;top:20px;left:20px;width:300px;padding:22px;background:#ffffffed;border:1px solid #d9e1e8;border-radius:14px;box-shadow:0 6px 30px #20384818;max-height:90vh;overflow:auto}h1{font-size:22px;margin:0 0 10px}p{line-height:1.65;color:#586d7b}label{display:block;margin:12px 0}button{padding:8px 14px;border:1px solid #c9d6de;border-radius:7px;background:white;color:#28424f;cursor:pointer}#info{white-space:pre-wrap;font-size:12px;line-height:1.7}a{color:#196a99}#status{color:#31765c}footer{position:absolute;bottom:20px;right:24px;color:#536878;background:#ffffffd9;padding:10px 16px;border-radius:9px}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<aside><h1>Video2Scene</h1><p>从单目视频恢复的表面与简化物体。拖动旋转，右键平移，滚轮缩放。</p><div id="status">正在加载场景…</div><label><input id="scan" type="checkbox" checked> 重建表面</label><label><input id="objects" type="checkbox"> 物体几何体</label><label><input id="planes" type="checkbox"> 平面几何体</label><label><input id="cameras" type="checkbox"> 相机轨迹</label><button id="reset">重置视角</button> <button id="top">俯视</button><p><a href="scene.glb" download>组合 GLB</a> · <a href="scan.glb" download>扫描 GLB</a> · <a href="model.glb" download>模型 GLB</a> · <a href="scene.json" download>场景参数</a></p><div id="info">点击物体查看参数</div><p style="font-size:12px">单位为估计米制。简化几何体的隐藏面及厚度包含建模假设。</p></aside><footer>RGB → ViPE → TSDF → 几何建模</footer>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const scene=new THREE.Scene();scene.background=new THREE.Color('#eef1f5');
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));document.body.appendChild(renderer.domElement);
+const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.01,2000);
+const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;
+scene.add(new THREE.HemisphereLight(0xffffff,0x718096,2.5));const light=new THREE.DirectionalLight(0xffffff,2);light.position.set(4,8,6);scene.add(light);
+let root,meta,bounds,center,radius,path;const meshes=[];
+const status=document.querySelector('#status');
+if(new URLSearchParams(location.search).has('objects')){document.querySelector('#scan').checked=false;document.querySelector('#objects').checked=true;}
+function kind(name){return name.startsWith('scan')?'scan':name.startsWith('surface')?'planes':'objects'}
+function visibility(){for(const mesh of meshes)mesh.visible=document.querySelector('#'+kind(mesh.name)).checked;if(path)path.visible=document.querySelector('#cameras').checked;}
+function reset(top=false){controls.target.copy(center);camera.position.copy(center).add(new THREE.Vector3(top?0:1.3,top?2.5:0.8,top?0.001:1.4).multiplyScalar(radius));camera.near=Math.max(radius/1000,.001);camera.far=radius*100;camera.updateProjectionMatrix();controls.update();}
+try{
+ [meta,root]=await Promise.all([fetch('scene.json').then(r=>{if(!r.ok)throw Error('scene.json '+r.status);return r.json()}),new GLTFLoader().loadAsync('scene.glb').then(g=>g.scene)]);
+ scene.add(root);root.traverse(o=>{if(o.isMesh){meshes.push(o);o.material.side=THREE.DoubleSide;}});
+ bounds=new THREE.Box3().setFromObject(root);center=bounds.getCenter(new THREE.Vector3());radius=Math.max(bounds.getSize(new THREE.Vector3()).length()/2,.2);
+ const positions=(meta.cameras||[]).map(c=>new THREE.Vector3(c.c2w[0][3],c.c2w[1][3],c.c2w[2][3]));path=new THREE.Line(new THREE.BufferGeometry().setFromPoints(positions),new THREE.LineBasicMaterial({color:0xe18b33}));scene.add(path);
+ if(!meshes.some(m=>kind(m.name)==='scan')){document.querySelector('#objects').checked=true;document.querySelector('#planes').checked=true;}
+ visibility();reset();status.textContent=`${meshes.length} 个网格 · ${meta.stats?.triangles?.toLocaleString()||'—'} 个扫描三角面`;
+ document.querySelector('#reset').onclick=()=>reset();document.querySelector('#top').onclick=()=>reset(true);
+ for(const input of document.querySelectorAll('input'))input.onchange=visibility;
+ const raycaster=new THREE.Raycaster();renderer.domElement.addEventListener('click',e=>{raycaster.setFromCamera(new THREE.Vector2(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1),camera);const hit=raycaster.intersectObjects(meshes.filter(m=>m.visible))[0];if(!hit)return;const spec=meta.objects.find(o=>o.id===hit.object.name);document.querySelector('#info').textContent=spec?`${spec.label}\n尺寸 (局部 x/y/z): ${spec.dimensions.map(x=>x.toFixed(3)).join(' × ')} m\n中心: ${spec.center.map(x=>x.toFixed(3)).join(', ')}\n观测帧: ${spec.frame_indices?.length||'平面拟合'}\n${spec.assumptions.join('\n')}`:'重建表面：保留可见几何与顶点颜色';});
+}catch(e){status.textContent='加载失败：'+e.message+'。请使用本地 HTTP 服务，并检查 CDN 网络连接。';console.error(e)}
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+renderer.setAnimationLoop(()=>{controls.update();renderer.render(scene,camera)});
+</script></html>

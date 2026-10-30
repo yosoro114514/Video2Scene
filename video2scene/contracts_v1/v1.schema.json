@@ -1,0 +1,3621 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:video2scene:contracts:1.0",
+  "title": "Video2Scene parallel development contract v1.0",
+  "$defs": {
+    "BaseToken": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "head_seq": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "revision",
+        "head_seq"
+      ],
+      "additionalProperties": false
+    },
+    "ArtifactRef": {
+      "type": "object",
+      "properties": {
+        "uri": {
+          "type": "string",
+          "pattern": "^artifact://[A-Za-z0-9_.-]+/[A-Za-z0-9_./-]+$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "uri",
+        "sha256",
+        "media_type",
+        "role"
+      ],
+      "additionalProperties": false
+    },
+    "Transform": {
+      "type": "object",
+      "properties": {
+        "translation_m": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "rotation_xyzw": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "scale": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "translation_m",
+        "rotation_xyzw",
+        "scale"
+      ],
+      "additionalProperties": false
+    },
+    "Bounds": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "max": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false
+    },
+    "AssetRef": {
+      "type": "object",
+      "properties": {
+        "asset_version": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "artifact": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "native_frame": {
+          "enum": [
+            "asset_y_up",
+            "blender_z_up"
+          ]
+        },
+        "native_to_object": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "minItems": 4,
+          "maxItems": 4
+        }
+      },
+      "required": [
+        "asset_version",
+        "artifact",
+        "native_frame",
+        "native_to_object"
+      ],
+      "additionalProperties": false
+    },
+    "FieldState": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "enum": [
+            "observed",
+            "derived",
+            "user",
+            "model",
+            "unknown"
+          ]
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "decision_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "source",
+        "locked",
+        "decision_ref"
+      ],
+      "additionalProperties": false
+    },
+    "SceneObject": {
+      "type": "object",
+      "properties": {
+        "instance_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "kind": {
+          "enum": [
+            "object",
+            "support",
+            "wall",
+            "opening",
+            "floor",
+            "ceiling"
+          ]
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transform": {
+          "$ref": "#/$defs/Transform"
+        },
+        "local_bounds_m": {
+          "$ref": "#/$defs/Bounds"
+        },
+        "support_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "asset": {
+          "$ref": "#/$defs/AssetRef"
+        },
+        "field_state": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "$ref": "#/$defs/FieldState"
+            },
+            "transform.translation_m": {
+              "$ref": "#/$defs/FieldState"
+            },
+            "transform.rotation_xyzw": {
+              "$ref": "#/$defs/FieldState"
+            },
+            "transform.scale": {
+              "$ref": "#/$defs/FieldState"
+            },
+            "support_id": {
+              "$ref": "#/$defs/FieldState"
+            },
+            "asset.geometry": {
+              "$ref": "#/$defs/FieldState"
+            },
+            "asset.materials": {
+              "$ref": "#/$defs/FieldState"
+            }
+          },
+          "required": [
+            "category",
+            "transform.translation_m",
+            "transform.rotation_xyzw",
+            "transform.scale",
+            "support_id",
+            "asset.geometry",
+            "asset.materials"
+          ],
+          "additionalProperties": false
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+          },
+          "minItems": 0
+        },
+        "geometry_source": {
+          "enum": [
+            "observed",
+            "inferred",
+            "mixed"
+          ]
+        }
+      },
+      "required": [
+        "instance_id",
+        "kind",
+        "category",
+        "transform",
+        "local_bounds_m",
+        "support_id",
+        "asset",
+        "field_state",
+        "evidence_ids",
+        "geometry_source"
+      ],
+      "additionalProperties": false
+    },
+    "SceneSnapshot": {
+      "type": "object",
+      "properties": {
+        "contract_version": {
+          "const": "video2scene/1.0"
+        },
+        "scene_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "parent_revision": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "capture_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "geometry_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "world_frame": {
+          "const": "scene_y_up"
+        },
+        "object_frame": {
+          "const": "object_y_up"
+        },
+        "unit": {
+          "const": "m"
+        },
+        "scale_status": {
+          "enum": [
+            "estimated",
+            "calibrated"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "partial_scene",
+            "room"
+          ]
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SceneObject"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "contract_version",
+        "scene_id",
+        "revision",
+        "parent_revision",
+        "capture_revision",
+        "geometry_revision",
+        "world_frame",
+        "object_frame",
+        "unit",
+        "scale_status",
+        "scope",
+        "objects"
+      ],
+      "additionalProperties": false
+    },
+    "SceneView": {
+      "type": "object",
+      "properties": {
+        "head": {
+          "$ref": "#/$defs/BaseToken"
+        },
+        "snapshot": {
+          "$ref": "#/$defs/SceneSnapshot"
+        }
+      },
+      "required": [
+        "head",
+        "snapshot"
+      ],
+      "additionalProperties": false
+    },
+    "EvidenceFrame": {
+      "type": "object",
+      "properties": {
+        "source_frame_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "source_time_s": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "preview_time_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "rgb": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "mask": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ArtifactRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "K": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "c2w": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "source_to_image": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "selection_reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "source_frame_id",
+        "source_time_s",
+        "preview_time_s",
+        "width",
+        "height",
+        "rgb",
+        "mask",
+        "K",
+        "c2w",
+        "source_to_image",
+        "selection_reason"
+      ],
+      "additionalProperties": false
+    },
+    "EvidenceBundle": {
+      "type": "object",
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "scene_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "scene_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "capture_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "geometry_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "target_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+          },
+          "minItems": 1
+        },
+        "purpose": {
+          "enum": [
+            "review",
+            "refine",
+            "validation"
+          ]
+        },
+        "frames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EvidenceFrame"
+          },
+          "minItems": 1
+        },
+        "evidence_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "scene_id",
+        "scene_revision",
+        "capture_revision",
+        "geometry_revision",
+        "target_ids",
+        "purpose",
+        "frames",
+        "evidence_hash"
+      ],
+      "additionalProperties": false
+    },
+    "CandidateRef": {
+      "type": "object",
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "scene_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "base_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "base_head_seq": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidate_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "state": {
+          "enum": [
+            "staged",
+            "built",
+            "checked",
+            "committed",
+            "rejected",
+            "stale"
+          ]
+        }
+      },
+      "required": [
+        "candidate_id",
+        "scene_id",
+        "base_revision",
+        "base_head_seq",
+        "candidate_hash",
+        "state"
+      ],
+      "additionalProperties": false
+    },
+    "SceneDraft": {
+      "type": "object",
+      "properties": {
+        "contract_version": {
+          "const": "video2scene/1.0"
+        },
+        "scene_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "capture_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "geometry_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "world_frame": {
+          "const": "scene_y_up"
+        },
+        "object_frame": {
+          "const": "object_y_up"
+        },
+        "unit": {
+          "const": "m"
+        },
+        "scale_status": {
+          "enum": [
+            "estimated",
+            "calibrated"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "partial_scene",
+            "room"
+          ]
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SceneObject"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "contract_version",
+        "scene_id",
+        "capture_revision",
+        "geometry_revision",
+        "world_frame",
+        "object_frame",
+        "unit",
+        "scale_status",
+        "scope",
+        "objects"
+      ],
+      "additionalProperties": false
+    },
+    "CandidateSnapshot": {
+      "type": "object",
+      "properties": {
+        "candidate": {
+          "$ref": "#/$defs/CandidateRef"
+        },
+        "scene": {
+          "$ref": "#/$defs/SceneDraft"
+        }
+      },
+      "required": [
+        "candidate",
+        "scene"
+      ],
+      "additionalProperties": false
+    },
+    "AssetUpdate": {
+      "type": "object",
+      "properties": {
+        "instance_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "asset": {
+          "$ref": "#/$defs/AssetRef"
+        },
+        "local_bounds_m": {
+          "$ref": "#/$defs/Bounds"
+        }
+      },
+      "required": [
+        "instance_id",
+        "asset",
+        "local_bounds_m"
+      ],
+      "additionalProperties": false
+    },
+    "BuildOutput": {
+      "type": "object",
+      "properties": {
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          },
+          "minItems": 1
+        },
+        "asset_updates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AssetUpdate"
+          },
+          "minItems": 0
+        },
+        "input_fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "artifact_refs",
+        "asset_updates",
+        "input_fingerprint"
+      ],
+      "additionalProperties": false
+    },
+    "BuildResult": {
+      "type": "object",
+      "properties": {
+        "candidate": {
+          "$ref": "#/$defs/CandidateRef"
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "candidate",
+        "artifact_refs"
+      ],
+      "additionalProperties": false
+    },
+    "RenderReport": {
+      "type": "object",
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "candidate_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "evidence_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "frame_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+          },
+          "minItems": 1
+        },
+        "view_mode": {
+          "enum": [
+            "normal",
+            "visible_mask",
+            "xray"
+          ]
+        },
+        "camera_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "candidate_id",
+        "candidate_hash",
+        "evidence_id",
+        "evidence_hash",
+        "frame_ids",
+        "view_mode",
+        "camera_hash",
+        "artifact_refs"
+      ],
+      "additionalProperties": false
+    },
+    "Check": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "passed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "details": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "name",
+        "passed",
+        "severity",
+        "details",
+        "artifact_refs"
+      ],
+      "additionalProperties": false
+    },
+    "ValidationReport": {
+      "type": "object",
+      "properties": {
+        "validation_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "candidate_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "candidate_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "evidence_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "criteria_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "criteria_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "intent": {
+          "enum": [
+            "reconstruction_correction",
+            "design_edit"
+          ]
+        },
+        "technical_pass": {
+          "type": "boolean"
+        },
+        "visual_pass": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "committable": {
+          "type": "boolean"
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Check"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "validation_id",
+        "candidate_id",
+        "candidate_hash",
+        "evidence_id",
+        "evidence_hash",
+        "criteria_id",
+        "criteria_hash",
+        "intent",
+        "technical_pass",
+        "visual_pass",
+        "committable",
+        "checks"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "committable": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "technical_pass": {
+                "const": true
+              },
+              "visual_pass": {
+                "enum": [
+                  true,
+                  null
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "CollisionReport": {
+      "type": "object",
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "candidate_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "method": {
+          "enum": [
+            "mesh",
+            "box"
+          ]
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Check"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "candidate_id",
+        "candidate_hash",
+        "method",
+        "passed",
+        "checks"
+      ],
+      "additionalProperties": false
+    },
+    "CommitResult": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "previous_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "head_seq": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "event_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        }
+      },
+      "required": [
+        "revision",
+        "previous_revision",
+        "head_seq",
+        "event_id"
+      ],
+      "additionalProperties": false
+    },
+    "HistoryEntry": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "parent_revision": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operation": {
+          "enum": [
+            "import",
+            "patch",
+            "refine"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "revision",
+        "parent_revision",
+        "operation",
+        "created_at"
+      ],
+      "additionalProperties": false
+    },
+    "HistoryResult": {
+      "type": "object",
+      "properties": {
+        "head": {
+          "$ref": "#/$defs/BaseToken"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HistoryEntry"
+          },
+          "minItems": 0
+        },
+        "can_undo": {
+          "type": "boolean"
+        },
+        "can_redo": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "head",
+        "entries",
+        "can_undo",
+        "can_redo"
+      ],
+      "additionalProperties": false
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "INVALID_ARGUMENT",
+            "UNSUPPORTED_CONTRACT",
+            "NOT_FOUND",
+            "FORBIDDEN_SCOPE",
+            "LOCKED_FIELD",
+            "STALE_REVISION",
+            "IDEMPOTENCY_CONFLICT",
+            "NO_CHANGE",
+            "EVIDENCE_MISMATCH",
+            "FRAME_MISMATCH",
+            "CONSTRAINT_VIOLATION",
+            "BUILD_FAILED",
+            "STALE_ARTIFACT",
+            "TOOL_UNAVAILABLE",
+            "RESOURCE_EXHAUSTED",
+            "TIMEOUT",
+            "CANCELLED",
+            "INTERNAL_ERROR",
+            "EVENT_CURSOR_EXPIRED"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "details": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "retryable",
+        "details"
+      ],
+      "additionalProperties": false
+    },
+    "ApiError": {
+      "type": "object",
+      "properties": {
+        "contract_version": {
+          "const": "video2scene/1.0"
+        },
+        "error": {
+          "$ref": "#/$defs/Error"
+        }
+      },
+      "required": [
+        "contract_version",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "JobReceipt": {
+      "type": "object",
+      "properties": {
+        "job_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "state": {
+          "enum": [
+            "queued",
+            "running"
+          ]
+        }
+      },
+      "required": [
+        "job_id",
+        "state"
+      ],
+      "additionalProperties": false
+    },
+    "JobRecord": {
+      "type": "object",
+      "properties": {
+        "job_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "scene_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "base_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "base_head_seq": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "request_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "state": {
+          "enum": [
+            "queued",
+            "running",
+            "cancel_requested",
+            "succeeded",
+            "failed",
+            "cancelled",
+            "stale"
+          ]
+        },
+        "progress": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CandidateRef"
+            },
+            {
+              "$ref": "#/$defs/BuildResult"
+            },
+            {
+              "$ref": "#/$defs/RenderReport"
+            },
+            {
+              "$ref": "#/$defs/ValidationReport"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Error"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "job_id",
+        "scene_id",
+        "base_revision",
+        "base_head_seq",
+        "request_id",
+        "state",
+        "progress",
+        "result",
+        "error"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "failed",
+                  "stale"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "error": {
+                "$ref": "#/$defs/Error"
+              },
+              "result": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "succeeded"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "error": {
+                "type": "null"
+              },
+              "result": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/CandidateRef"
+                  },
+                  {
+                    "$ref": "#/$defs/BuildResult"
+                  },
+                  {
+                    "$ref": "#/$defs/RenderReport"
+                  },
+                  {
+                    "$ref": "#/$defs/ValidationReport"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "queued",
+                  "running",
+                  "cancel_requested"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "error": {
+                "type": "null"
+              },
+              "result": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Edit": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "instance_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "field": {
+              "const": "category"
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "instance_id",
+            "field",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "instance_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "field": {
+              "const": "transform.translation_m"
+            },
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          },
+          "required": [
+            "instance_id",
+            "field",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "instance_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "field": {
+              "const": "transform.rotation_xyzw"
+            },
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4
+            }
+          },
+          "required": [
+            "instance_id",
+            "field",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "instance_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "field": {
+              "const": "transform.scale"
+            },
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          },
+          "required": [
+            "instance_id",
+            "field",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "instance_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "field": {
+              "const": "support_id"
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "instance_id",
+            "field",
+            "value"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Budget": {
+      "type": "object",
+      "properties": {
+        "max_iterations": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "timeout_s": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 86400
+        },
+        "max_model_calls": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "max_iterations",
+        "timeout_s"
+      ],
+      "additionalProperties": false
+    },
+    "Constraints": {
+      "type": "object",
+      "properties": {
+        "keep_root_transform": {
+          "type": "boolean"
+        },
+        "keep_support": {
+          "type": "boolean"
+        },
+        "keep_bounds": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "keep_root_transform",
+        "keep_support",
+        "keep_bounds"
+      ],
+      "additionalProperties": false
+    },
+    "ToolRequest": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "inspect_scene"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "revision": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                }
+              },
+              "required": [
+                "revision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "select_evidence"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "revision": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "target_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                  },
+                  "minItems": 1
+                },
+                "purpose": {
+                  "enum": [
+                    "review",
+                    "refine",
+                    "validation"
+                  ]
+                },
+                "n": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10
+                }
+              },
+              "required": [
+                "revision",
+                "target_ids",
+                "purpose",
+                "n"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "apply_scene_patch"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "intent": {
+                  "enum": [
+                    "reconstruction_correction",
+                    "design_edit"
+                  ]
+                },
+                "edits": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/Edit"
+                  },
+                  "minItems": 1
+                },
+                "decision_ref": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                }
+              },
+              "required": [
+                "intent",
+                "edits",
+                "decision_ref"
+              ],
+              "additionalProperties": false
+            },
+            "base_revision": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "base_head_seq": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "params",
+            "base_revision",
+            "base_head_seq"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "build_whitebox"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "candidate_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "candidate_hash": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              },
+              "required": [
+                "candidate_id",
+                "candidate_hash"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "refine_asset"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "target_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "intent": {
+                  "enum": [
+                    "reconstruction_correction",
+                    "design_edit"
+                  ]
+                },
+                "allowed_fields": {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "asset.geometry",
+                      "asset.materials"
+                    ]
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "evidence_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "constraints": {
+                  "$ref": "#/$defs/Constraints"
+                },
+                "budget": {
+                  "$ref": "#/$defs/Budget"
+                },
+                "decision_ref": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                }
+              },
+              "required": [
+                "target_id",
+                "intent",
+                "allowed_fields",
+                "evidence_id",
+                "constraints",
+                "budget",
+                "decision_ref"
+              ],
+              "additionalProperties": false
+            },
+            "base_revision": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "base_head_seq": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "params",
+            "base_revision",
+            "base_head_seq"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "render_compare"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "candidate_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "candidate_hash": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "frame_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                  },
+                  "minItems": 1
+                },
+                "view_mode": {
+                  "enum": [
+                    "normal",
+                    "visible_mask",
+                    "xray"
+                  ]
+                }
+              },
+              "required": [
+                "candidate_id",
+                "candidate_hash",
+                "frame_ids",
+                "view_mode"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "validate_candidate"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "candidate_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "candidate_hash": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "evidence_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "intent": {
+                  "enum": [
+                    "reconstruction_correction",
+                    "design_edit"
+                  ]
+                },
+                "criteria_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                }
+              },
+              "required": [
+                "candidate_id",
+                "candidate_hash",
+                "evidence_id",
+                "intent",
+                "criteria_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "commit_candidate"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "candidate_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "candidate_hash": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "validation_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "decision_ref": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                }
+              },
+              "required": [
+                "candidate_id",
+                "candidate_hash",
+                "validation_id",
+                "decision_ref"
+              ],
+              "additionalProperties": false
+            },
+            "base_revision": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "base_head_seq": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "params",
+            "base_revision",
+            "base_head_seq"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "revision_history"
+            },
+            "params": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "const": "list"
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 1000
+                    }
+                  },
+                  "required": [
+                    "action"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "enum": [
+                        "undo",
+                        "redo"
+                      ]
+                    },
+                    "decision_ref": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                    }
+                  },
+                  "required": [
+                    "action",
+                    "decision_ref"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "base_revision": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "base_head_seq": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "params"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "params": {
+                    "properties": {
+                      "action": {
+                        "enum": [
+                          "undo",
+                          "redo"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "base_revision",
+                  "base_head_seq"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "job_control"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "job_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "action": {
+                  "enum": [
+                    "status",
+                    "cancel"
+                  ]
+                }
+              },
+              "required": [
+                "job_id",
+                "action"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "params"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ToolResponse": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "inspect_scene"
+            },
+            "status": {
+              "const": "ok"
+            },
+            "result": {
+              "$ref": "#/$defs/SceneView"
+            },
+            "error": {
+              "type": "null"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "status",
+            "result",
+            "error",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "select_evidence"
+            },
+            "status": {
+              "const": "ok"
+            },
+            "result": {
+              "$ref": "#/$defs/EvidenceBundle"
+            },
+            "error": {
+              "type": "null"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "status",
+            "result",
+            "error",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "apply_scene_patch"
+            },
+            "status": {
+              "const": "ok"
+            },
+            "result": {
+              "$ref": "#/$defs/CandidateRef"
+            },
+            "error": {
+              "type": "null"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "status",
+            "result",
+            "error",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "build_whitebox"
+            },
+            "status": {
+              "const": "ok"
+            },
+            "result": {
+              "$ref": "#/$defs/BuildResult"
+            },
+            "error": {
+              "type": "null"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "status",
+            "result",
+            "error",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "render_compare"
+            },
+            "status": {
+              "const": "ok"
+            },
+            "result": {
+              "$ref": "#/$defs/RenderReport"
+            },
+            "error": {
+              "type": "null"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "status",
+            "result",
+            "error",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "validate_candidate"
+            },
+            "status": {
+              "const": "ok"
+            },
+            "result": {
+              "$ref": "#/$defs/ValidationReport"
+            },
+            "error": {
+              "type": "null"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "status",
+            "result",
+            "error",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "commit_candidate"
+            },
+            "status": {
+              "const": "ok"
+            },
+            "result": {
+              "$ref": "#/$defs/CommitResult"
+            },
+            "error": {
+              "type": "null"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "status",
+            "result",
+            "error",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "revision_history"
+            },
+            "status": {
+              "const": "ok"
+            },
+            "result": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/HistoryResult"
+                },
+                {
+                  "$ref": "#/$defs/CommitResult"
+                }
+              ]
+            },
+            "error": {
+              "type": "null"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "status",
+            "result",
+            "error",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "const": "job_control"
+            },
+            "status": {
+              "const": "ok"
+            },
+            "result": {
+              "$ref": "#/$defs/JobRecord"
+            },
+            "error": {
+              "type": "null"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "status",
+            "result",
+            "error",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "enum": [
+                "build_whitebox",
+                "refine_asset",
+                "render_compare",
+                "validate_candidate"
+              ]
+            },
+            "status": {
+              "const": "accepted"
+            },
+            "result": {
+              "$ref": "#/$defs/JobReceipt"
+            },
+            "error": {
+              "type": "null"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "status",
+            "result",
+            "error",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "tool": {
+              "enum": [
+                "inspect_scene",
+                "select_evidence",
+                "apply_scene_patch",
+                "build_whitebox",
+                "refine_asset",
+                "render_compare",
+                "validate_candidate",
+                "commit_candidate",
+                "revision_history",
+                "job_control"
+              ]
+            },
+            "status": {
+              "const": "error"
+            },
+            "result": {
+              "type": "null"
+            },
+            "error": {
+              "$ref": "#/$defs/Error"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "scene_id",
+            "tool",
+            "status",
+            "result",
+            "error",
+            "warnings"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "UserCommand": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "command_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "session_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "base_revision": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "base_head_seq": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "selected_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+              },
+              "minItems": 0
+            },
+            "intent": {
+              "enum": [
+                "reconstruction_correction",
+                "design_edit"
+              ]
+            },
+            "kind": {
+              "const": "language"
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "contract_version",
+            "command_id",
+            "session_id",
+            "scene_id",
+            "base_revision",
+            "base_head_seq",
+            "selected_ids",
+            "intent",
+            "kind",
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "command_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "session_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "base_revision": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "base_head_seq": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "selected_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+              },
+              "minItems": 0
+            },
+            "intent": {
+              "enum": [
+                "reconstruction_correction",
+                "design_edit"
+              ]
+            },
+            "kind": {
+              "const": "patch"
+            },
+            "edits": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Edit"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "contract_version",
+            "command_id",
+            "session_id",
+            "scene_id",
+            "base_revision",
+            "base_head_seq",
+            "selected_ids",
+            "intent",
+            "kind",
+            "edits"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "CommandReceipt": {
+      "type": "object",
+      "properties": {
+        "command_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "operation_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "state": {
+          "const": "accepted"
+        }
+      },
+      "required": [
+        "command_id",
+        "operation_id",
+        "state"
+      ],
+      "additionalProperties": false
+    },
+    "CommandRecord": {
+      "type": "object",
+      "properties": {
+        "receipt": {
+          "$ref": "#/$defs/CommandReceipt"
+        },
+        "state": {
+          "enum": [
+            "accepted",
+            "running",
+            "needs_clarification",
+            "succeeded",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "request_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+          },
+          "minItems": 0
+        },
+        "message": {
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Error"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "receipt",
+        "state",
+        "request_ids",
+        "message",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "SceneEvent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "event_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "seq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "type": {
+              "const": "command.accepted"
+            },
+            "occurred_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "request_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "data": {
+              "$ref": "#/$defs/CommandReceipt"
+            }
+          },
+          "required": [
+            "contract_version",
+            "event_id",
+            "scene_id",
+            "seq",
+            "type",
+            "occurred_at",
+            "request_id",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "event_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "seq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "type": {
+              "const": "tool.completed"
+            },
+            "occurred_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "request_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "request_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "status": {
+                  "enum": [
+                    "ok",
+                    "accepted",
+                    "error"
+                  ]
+                }
+              },
+              "required": [
+                "request_id",
+                "status"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "contract_version",
+            "event_id",
+            "scene_id",
+            "seq",
+            "type",
+            "occurred_at",
+            "request_id",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "event_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "seq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "type": {
+              "const": "job.updated"
+            },
+            "occurred_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "request_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "data": {
+              "$ref": "#/$defs/JobRecord"
+            }
+          },
+          "required": [
+            "contract_version",
+            "event_id",
+            "scene_id",
+            "seq",
+            "type",
+            "occurred_at",
+            "request_id",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "event_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "seq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "type": {
+              "const": "scene.head_changed"
+            },
+            "occurred_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "request_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "data": {
+              "$ref": "#/$defs/CommitResult"
+            }
+          },
+          "required": [
+            "contract_version",
+            "event_id",
+            "scene_id",
+            "seq",
+            "type",
+            "occurred_at",
+            "request_id",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "event_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "seq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "type": {
+              "const": "agent.text"
+            },
+            "occurred_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "request_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "operation_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "session_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "operation_id",
+                "session_id",
+                "text"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "contract_version",
+            "event_id",
+            "scene_id",
+            "seq",
+            "type",
+            "occurred_at",
+            "request_id",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "event_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "seq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "type": {
+              "const": "agent.clarification"
+            },
+            "occurred_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "request_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "operation_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "session_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "question": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "command_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                }
+              },
+              "required": [
+                "operation_id",
+                "session_id",
+                "question",
+                "command_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "contract_version",
+            "event_id",
+            "scene_id",
+            "seq",
+            "type",
+            "occurred_at",
+            "request_id",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "contract_version": {
+              "const": "video2scene/1.0"
+            },
+            "event_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "scene_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "seq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "type": {
+              "const": "agent.finished"
+            },
+            "occurred_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "request_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "operation_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "session_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                },
+                "state": {
+                  "enum": [
+                    "succeeded",
+                    "needs_clarification",
+                    "failed",
+                    "cancelled"
+                  ]
+                },
+                "request_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+                  },
+                  "minItems": 0
+                }
+              },
+              "required": [
+                "operation_id",
+                "session_id",
+                "state",
+                "request_ids"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "contract_version",
+            "event_id",
+            "scene_id",
+            "seq",
+            "type",
+            "occurred_at",
+            "request_id",
+            "data"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "SessionSpec": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "instruction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scene_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "base_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "base_head_seq": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "allowed_tools": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "inspect_scene",
+              "select_evidence",
+              "apply_scene_patch",
+              "build_whitebox",
+              "refine_asset",
+              "render_compare",
+              "validate_candidate",
+              "commit_candidate",
+              "revision_history",
+              "job_control"
+            ]
+          },
+          "minItems": 1
+        },
+        "target_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+          },
+          "minItems": 0
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+          },
+          "minItems": 0
+        },
+        "budget": {
+          "$ref": "#/$defs/Budget"
+        }
+      },
+      "required": [
+        "session_id",
+        "model",
+        "instruction",
+        "scene_id",
+        "base_revision",
+        "base_head_seq",
+        "allowed_tools",
+        "target_ids",
+        "evidence_ids",
+        "budget"
+      ],
+      "additionalProperties": false
+    },
+    "ProviderCapabilities": {
+      "type": "object",
+      "properties": {
+        "vision": {
+          "type": "boolean"
+        },
+        "tool_calling": {
+          "type": "boolean"
+        },
+        "streaming": {
+          "type": "boolean"
+        },
+        "cancel": {
+          "type": "boolean"
+        },
+        "resume": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "vision",
+        "tool_calling",
+        "streaming",
+        "cancel",
+        "resume"
+      ],
+      "additionalProperties": false
+    },
+    "AgentEvent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "type": {
+              "const": "text_delta"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "text"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "session_id",
+            "type",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "type": {
+              "const": "tool_call"
+            },
+            "data": {
+              "$ref": "#/$defs/ToolRequest"
+            }
+          },
+          "required": [
+            "session_id",
+            "type",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "type": {
+              "const": "tool_result"
+            },
+            "data": {
+              "$ref": "#/$defs/ToolResponse"
+            }
+          },
+          "required": [
+            "session_id",
+            "type",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "type": {
+              "const": "needs_clarification"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "question"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "session_id",
+            "type",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "type": {
+              "const": "session_end"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "enum": [
+                    "succeeded",
+                    "failed",
+                    "cancelled",
+                    "needs_clarification"
+                  ]
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "session_id",
+            "type",
+            "data"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/ToolRequest"
+    },
+    {
+      "$ref": "#/$defs/ToolResponse"
+    },
+    {
+      "$ref": "#/$defs/UserCommand"
+    },
+    {
+      "$ref": "#/$defs/SceneEvent"
+    }
+  ]
+}

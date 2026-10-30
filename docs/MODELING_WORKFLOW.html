@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video2Scene · 公开工作流说明</title>
+<style>
+:root{color-scheme:light;--ink:#183d36;--muted:#526b65;--bg:#f4f7f3;--line:#d9e3db;--accent:#176c57}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1120px;margin:auto;padding:28px}header{display:flex;justify-content:space-between;align-items:center;gap:24px;border-bottom:1px solid var(--line)}nav{display:flex;gap:20px;flex-wrap:wrap}header strong{font-size:22px}h1{font-size:clamp(30px,5vw,52px);line-height:1.22;letter-spacing:-1px;margin:12px 0 20px}h2{font-size:26px;line-height:1.4;margin:0 0 18px}h3{font-size:20px;margin:0 0 12px}.eyebrow{font-size:12px;letter-spacing:2px;color:var(--accent);font-weight:700}.intro{max-width:800px;font-size:19px;color:var(--muted)}section{margin:40px 0 64px;scroll-margin-top:20px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px}.media{padding:0;overflow:hidden}video{display:block;width:100%;height:auto;background:#17212d}.caption{padding:18px 24px;color:var(--muted);margin:0}.caption a{font-weight:600}.steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;list-style:none;padding:0;counter-reset:step}.steps li{counter-increment:step}.steps h3:before{content:counter(step,decimal-leading-zero);color:var(--accent);margin-right:14px;font-size:15px}.steps p{margin:0;color:var(--muted)}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:530px}th,td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#eaf1e9}code{font:14px/1.7 ui-monospace,monospace;background:#eaf1e9;padding:3px 6px;border-radius:4px;overflow-wrap:anywhere}details{border-top:1px solid var(--line);padding:18px 0}summary{font-weight:600;cursor:pointer}details p{color:var(--muted);margin-bottom:0}.links{display:flex;gap:18px;flex-wrap:wrap}footer{border-top:1px solid var(--line);color:var(--muted);font-size:14px}.note{color:var(--muted);font-size:14px}@media(max-width:650px){header{align-items:flex-start;flex-direction:column;padding:22px}main{padding:22px}.steps{grid-template-columns:1fr}.card{padding:20px}.media{padding:0}section{margin:28px 0 42px}nav{gap:14px}h1{letter-spacing:0}}
+</style></head>
+<body id="top">
+<header><strong>Video2Scene</strong><nav aria-label="页面导航"><a href="#showcase">案例</a><a href="#workflow">建模流程</a><a href="#concurrency">持续调度</a><a href="#recovery">恢复</a><a href="https://github.com/yosoro114514/Video2Scene">GitHub ↗</a></nav></header>
+<main>
+<section><span class="eyebrow">PUBLIC PREVIEW · v0.1.0</span><h1>从视频观察，<br>到可继续编辑的三维场景。</h1><p class="intro">Pi 编排观察与工具调用，ViPE / SAM 提供几何与实例证据。用户核对布局后，对象作者与独立复核逐件完善资产，由宿主验证并保存。</p><div class="links"><a href="WORKFLOW.md">完整 Markdown 说明</a><a href="INSTALLATION.md">安装环境</a><a href="DEMO.md">先体验独立示例</a></div></section>
+<section id="showcase"><h2>合成客厅：参考场景与 Agent 重建</h2><div class="card media"><video controls preload="none" poster="assets/livingroom-comparison.jpg" aria-label="参考场景与 Agent 重建的 30 秒对比"><source src="https://github.com/yosoro114514/Video2Scene/releases/download/v0.1.0/livingroom-comparison.mp4" type="video/mp4">浏览器不支持视频，请使用下方下载链接。</video><p class="caption">30 秒 · 18 个建模目标已保存 · Blender / GLB 已重开验证<br><a href="https://github.com/yosoro114514/Video2Scene/releases/download/v0.1.0/livingroom-comparison.mp4">观看或下载视频 ↗</a>　<a href="SHOWCASE.md">案例与素材说明</a></p></div><p class="note">两侧按对应帧时间显示，分别使用参考相机与估计相机，照明不同。本片展示场景结构和布局；视频播放需要联网，文字与封面可离线查看。</p></section>
+<section id="workflow"><h2>每一步都有可检查的结果</h2><ol class="steps">
+<li class="card"><h3>观察与测量</h3><p>Pi 查看 RGB 观察帧，ViPE 估计相机与深度，SAM 提供实例掩码。证据通过原始帧号对应，生成空间范围和支撑关系提议。</p></li>
+<li class="card"><h3>白模与人工采用</h3><p>Agent 提出初始布局。用户在浏览器核对、调整并保存，再采用这个版本和精修目标；后续资产继承已采用的空间约束。</p></li>
+<li class="card"><h3>作者与独立复核</h3><p>对象作者编写 Blender 代码；宿主构建、重开、渲染并检查资产，独立 critic 对照源图评估结构，必要时返修。</p></li>
+<li class="card"><h3>保存与 Blender 导出</h3><p>完成的对象成为持久资产包。保存时合入最新获准场景，通过技术验证后提交版本，再导出与保存版本一致的 Blender 和 GLB。</p></li>
+</ol></section>
+<section id="concurrency"><h2>完成一件，就可以保存并补入下一件</h2><p>对象生成可以重叠，每个场景的保存串行执行。较快对象无需等待同组所有对象完成；依赖与待保存积压决定何时启动后续任务。</p><div class="card table-wrap"><table><thead><tr><th>资源</th><th>默认／范围</th><th>含义</th></tr></thead><tbody>
+<tr><td>对象任务</td><td>3／1–4</td><td>同时处于生成与复核流程的目标上限</td></tr><tr><td>对象模型名额</td><td>3／1–4</td><td>服务内跨项目共享的作者／critic 调用额度</td></tr><tr><td>Blender 执行组</td><td>1／1–2</td><td>共享构建、渲染及作者执行额度</td></tr><tr><td>场景保存</td><td>每场景 1</td><td>合并、验证与提交保持串行</td></tr></tbody></table></div><p class="note">作者整个调用保守占用 Blender 名额。对象任务数不等于同时运行的模型调用数，也不代表加速倍数；旧批次保留原模式。</p></section>
+<section id="recovery"><h2>连接失败后，保留已经完成的工作</h2><div class="card">
+<details open><summary>任务、资产与版本</summary><p>任务由服务持久管理，跨工具调用存活。操作 ID、进程身份、候选哈希和保存检查点用于查询已有工作，避免重复派发或旧场景覆盖新结果。</p></details>
+<details><summary>暂停与明确恢复</summary><p>暂停会停止补位和新合并；运行中的任务按状态收尾。恢复前核对当前授权、进程和失败记录。已经成功的资产与已保存对象继续保留。</p></details>
+<details><summary>连接重试的边界</summary><p>主控瞬时连接错误最多重试五次，间隔为 2／4／8／16／30 秒。对象 CLI 仅在日志证明尚未执行时重连容量拒绝；有执行或结果不明时，先核对已有结果。</p></details>
+<details><summary>当前能力范围</summary><p>单目尺度通常为估计值，遮挡部分可能依赖先验。透明与反射表面、缺少纹理和覆盖不足的输入仍可能失败。示例展示不等于通用重建精度保证。</p></details>
+</div></section>
+<section><h2>开始使用与参与开发</h2><p>先运行 <code>python -m video2scene demo</code> 体验无需模型的编辑与导出。完整视频路线从 <code>python -m video2scene workbench</code> 开始，需要已配置的模型与 GPU 环境。</p><div class="links"><a href="CONFIGURATION.md">路径、模型与并发设置</a><a href="ARCHITECTURE.md">代码与运行数据</a><a href="RELEASE_VALIDATION.md">验收范围</a><a href="../CONTRIBUTING.md">参与开发</a></div></section>
+</main><footer>Video2Scene · 个人开源项目 · 2026-10-30　<a href="../THIRD_PARTY_NOTICES.md">第三方素材与许可</a>　<a href="#top">返回顶部 ↑</a></footer>
+</body></html>

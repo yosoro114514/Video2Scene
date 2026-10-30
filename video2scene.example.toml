@@ -1,0 +1,14 @@
+# Copy to video2scene.local.toml (ignored by Git and release exports).
+# V2S_<UPPERCASE_KEY> environment variables override these values.
+# This file contains paths/settings only. Keep authentication in Codex itself.
+[video2scene]
+blender = "blender" # Executable on PATH, or an absolute host path using /.
+model = "gpt-6-astra" # Must exist in both your Pi catalog and your account.
+effort = "high"
+wsl_distro = "Ubuntu-22.04"
+sam_python = "python3" # Absolute path to the SAM environment's Linux Python.
+sam_checkpoint = "" # Required for segmentation: absolute Linux path to sam3.1_multiplex.pt.
+hf_home = "" # Optional absolute Linux cache path; empty uses worker defaults.
+torch_home = ""
+conda_bin = "" # Optional absolute Linux path to conda; default ~/miniforge3/bin/conda.
+conda_env = "vipe-scene"

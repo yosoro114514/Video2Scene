@@ -1,0 +1,62 @@
+{
+  "case": "Synthetic living room: reference scene and Agent reconstruction",
+  "date": "2026-10-30",
+  "release_tag": "v0.1.0",
+  "media": {
+    "file": "livingroom-comparison.mp4",
+    "url": "https://github.com/yosoro114514/Video2Scene/releases/download/v0.1.0/livingroom-comparison.mp4",
+    "sha256": "7f743c3fe4c00ffbf5b86bf448d81a4ff671a862d7ac9b2b88d500098ad978ef",
+    "bytes": 8955957,
+    "frames": 300,
+    "fps": 10,
+    "duration_s": 30,
+    "resolution": [
+      1920,
+      792
+    ],
+    "codec": "h264",
+    "audio": false
+  },
+  "cover": {
+    "file": "livingroom-comparison.jpg",
+    "sha256": "f92f8979991b94135a2a4495fca6e9d398cb14decbd3baada0e5e02e2f15e529"
+  },
+  "run": {
+    "input_type": "synthetic monocular RGB video",
+    "geometry_frames": 300,
+    "sam_observation_frames": 120,
+    "human_layout_acceptance": true,
+    "saved_targets": 18,
+    "saved_head_seq": 18,
+    "exports": [
+      "blend",
+      "glb"
+    ],
+    "reopen_verified": true
+  },
+  "concurrency": {
+    "observed_author_peak": 2,
+    "observed_scene_save_peak": 1,
+    "saves_overlapping_author_calls": 10,
+    "sequential_speedup_baseline": false
+  },
+  "display": {
+    "left": "Reference scene",
+    "right": "Agent reconstruction",
+    "time_policy": "Corresponding source-frame timestamps",
+    "camera_policy": "Reference camera and estimated reconstruction camera; no ground-truth camera fitting",
+    "lighting": "Different lighting; qualitative comparison",
+    "publication_edit": "Title band replaced; scene sequence and frame times retained"
+  },
+  "materials": {
+    "provider": "Poly Haven",
+    "license": "CC0",
+    "license_url": "https://polyhaven.com/license",
+    "assets": [
+      "oak_veneer_01",
+      "rough_linen",
+      "wool_boucle",
+      "residential_garden"
+    ]
+  }
+}

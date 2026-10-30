@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Redwood Agent 白模核查、人工修正与单对象精修工作台。">
+  <title>Redwood · 白模核查与精修</title>
+  <link rel="stylesheet" href="./review.css">
+</head>
+<body>
+  <header class="page-header">
+    <a class="brand" href="/agent/">VIPE<span>Redwood / Agent 工作台</span></a>
+    <div class="connection"><span id="connection-dot" aria-hidden="true"></span><span id="connection-text">读取运行状态</span></div>
+    <button id="refresh-status" class="quiet" type="button">刷新状态</button>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">HUMAN REVIEW · VERSIONED SCENE</p><h1 id="page-title">确认布局，再精修一个对象</h1><p id="page-lead" class="lead">先在下方工作台核对原图、调整白模并保存。确认当前版本后，GPT 才开始为选中对象生成精模。</p></div>
+      <div class="run-badge"><span id="phase-label">等待状态</span><p id="phase-message" role="status" aria-live="polite">正在连接本地运行记录。</p></div>
+    </section>
+    <ol class="milestones" aria-label="运行阶段">
+      <li data-stage="prior"><span>01</span><strong>看图与布局先验</strong><small>GPT 读取关键帧</small></li>
+      <li data-stage="geometry"><span>02</span><strong>分割与白模</strong><small>SAM / ViPE / Blender</small></li>
+      <li data-stage="needs_user"><span>03</span><strong>人工核查与保存</strong><small>你确认的场景版本</small></li>
+      <li data-stage="refining"><span>04</span><strong>精修与验证</strong><small>保留已确认的修改</small></li>
+    </ol>
+    <section id="batch-progress" class="batch-progress" aria-labelledby="batch-heading" hidden>
+      <div class="section-heading"><h2 id="batch-heading">家具逐对象精修</h2><span id="batch-count" class="pill">读取批次</span></div>
+      <p id="batch-message" role="status" aria-live="polite"></p>
+      <progress id="batch-meter" max="10" value="0" aria-label="已验证并保存的对象数量"></progress>
+      <ol id="batch-targets" class="batch-targets" aria-label="逐对象精修状态"></ol>
+      <p id="batch-lock" class="field-note">当前布局和相连墙体已锁定，逐个生成对象几何与材质。</p>
+    </section>
+    <section class="review-grid">
+      <article class="selection-card" aria-labelledby="selection-heading">
+        <div class="card-heading"><h2 id="selection-heading">当前保存状态</h2><span id="saved-indicator" class="pill">等待场景</span></div>
+        <dl class="facts"><dt>场景</dt><dd id="scene-id">—</dd><dt>版本</dt><dd id="scene-revision" class="mono">—</dd><dt>所选对象</dt><dd id="selected-object">在三维视图或对象列表中选择</dd><dt>尺寸 / 米</dt><dd id="object-dimensions">—</dd><dt>支撑对象</dt><dd id="object-support">—</dd></dl>
+        <p class="field-note" id="scene-note">布局和属性以服务端保存的版本为准。</p>
+        <button id="select-recommended" class="quiet recommendation" type="button" hidden>选择建议对象</button>
+      </article>
+      <article class="source-card" aria-labelledby="source-heading">
+        <div class="card-heading"><h2 id="source-heading">选中对象的源图</h2><span id="source-frame" class="mono muted">等待证据</span></div>
+        <div class="source-body"><img id="source-image" alt="选中对象的原始 RGB 证据" hidden><p id="source-empty" class="muted">在下方选择对象后，这里显示工作台当前的原始 RGB 帧。</p><p id="source-reason" class="field-note"></p></div>
+      </article>
+      <article class="confirm-card" aria-labelledby="confirm-heading">
+        <div class="card-heading"><h2 id="confirm-heading">确认白模，启动单对象精修</h2><span class="pill">由你触发</span></div>
+        <p id="confirm-description">GPT 将使用当前保存版本和对象证据构建精模。已确认的位置、尺寸、支撑关系及其他对象应保持不变。</p>
+        <label class="confirm-check"><input type="checkbox" id="reviewed" disabled><span>我已核对白模，所需修改已保存，确认精修当前选中对象。</span></label>
+        <button id="confirm" class="primary" type="button" disabled>确认当前白模并精修所选对象</button>
+        <p id="confirm-note" class="field-note" role="status" aria-live="polite">等待白模与源图就绪。</p>
+        <p id="confirmed-version" class="field-note mono" hidden></p>
+      </article>
+    </section>
+    <details class="quality-notes"><summary>白模假设与待核查项 · 尺度为估计</summary><p id="layout-summary"></p><ul id="layout-uncertainties"></ul></details>
+    <section class="editor-section" aria-labelledby="editor-heading">
+      <div class="section-heading"><div><p class="eyebrow">EDIT & SAVE</p><h2 id="editor-heading">白模交互工作台</h2></div><a id="open-editor" href="/" target="_blank" rel="noopener">独立打开工作台 ↗</a></div>
+      <p id="editor-guidance" class="editor-guidance">可先点击“选择建议对象”核对茶几等候选。选择对象 → 在右侧属性区修正世界位置（米）或局部缩放（倍数）→ 点击“保存修改”。至少保存一项实际位置或缩放修正后，再使用上方确认按钮进入精修。</p>
+      <div class="room-view-actions"><button id="room-top" class="quiet" type="button" disabled>俯视布局</button><button id="room-perspective" class="quiet" type="button" disabled>立体视角</button><label><input id="room-walls" type="checkbox" checked> 显示墙体</label><span class="field-note">视角与显隐只影响查看。</span></div>
+      <div id="editor-loading" class="editor-loading">白模尚未就绪，运行状态更新后自动加载。</div>
+      <iframe id="editor-frame" title="可编辑白模与原始 RGB 工作台" hidden></iframe>
+    </section>
+    <section class="activity-section" aria-labelledby="activity-heading"><div class="section-heading"><h2 id="activity-heading">运行进度</h2><span class="muted">读取实际服务状态</span></div><ol id="run-events" class="run-events"><li>等待运行记录。</li></ol><p id="run-error" class="error-message" role="alert" hidden></p></section>
+    <footer><span>Redwood · RGB → 布局先验 → 白模 → 人工确认 → 单对象精修</span><span id="updated-at">尚未更新</span></footer>
+  </main>
+  <script type="module" src="./review.mjs"></script>
+</body>
+</html>

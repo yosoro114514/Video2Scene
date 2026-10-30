@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+(async()=>{
+ const {initialState,acceptView,consumeEvent,makeCommand,propertyEdits}=await import('../../video2scene/editor_v1/state.mjs');
+ const examples=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../../docs/development/contracts/examples.json'),'utf8'));
+ const view=structuredClone(examples.positive.find(x=>x.name==='model_SceneView').value);
+ const state=initialState(view.snapshot.scene_id);assert(acceptView(state,view));
+ const head=(seq,head_seq,revision)=>({scene_id:state.sceneId,seq,type:'scene.head_changed',data:{head_seq,revision}});
+ assert(consumeEvent(state,head(5,3,'r003')).refresh);
+ assert.equal(consumeEvent(state,head(5,3,'r003')).accepted,false);
+ assert.equal(consumeEvent(state,head(4,2,'r002')).accepted,false);
+ const old=structuredClone(view);old.head.head_seq=2;old.head.revision='r002';old.snapshot.revision='r002';
+ assert.equal(acceptView(state,old),false,'late HTTP response cannot replace announced newer head');
+ const latest=structuredClone(view);latest.head.head_seq=3;latest.head.revision='r003';latest.snapshot.revision='r003';assert(acceptView(state,latest));
+ const before=structuredClone(state.view);consumeEvent(state,{scene_id:state.sceneId,seq:6,type:'job.updated',data:{job_id:'job1',state:'succeeded',result:{revision:'r999'}}});assert.deepEqual(state.view,before,'job completion does not change head');
+ assert.equal(consumeEvent(state,head(7,1,'r001')).refresh,false,'older head_seq with later seq is still old');
+ const command=makeCommand(state,'test_session','design_edit',{kind:'language',text:'undo'});assert.equal(command.base_head_seq,3);assert.equal(command.base_revision,'r003');assert(!('decision_ref' in command));
+ assert.equal(consumeEvent(state,{scene_id:'different',seq:100,type:'scene.head_changed',data:{head_seq:100}}).accepted,false);
+ const obj=state.view.snapshot.objects[0],values={'transform.scale':obj.transform.scale.map(v=>v+1e-12)};assert.deepEqual(propertyEdits(obj,values),[]);
+ console.log(JSON.stringify({passed:true,checks:['B17_duplicate_and_out_of_order_events','late_HTTP_response','job_success_not_head','base_token_in_commands','cross_scene_rejected','form_rounding_no_false_edit']},null,2));
+})().catch(e=>{console.error(e);process.exitCode=1});

@@ -1,0 +1,39 @@
+name: Offline regression
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Linux geometry library prerequisites
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1 libgomp1
+      - run: python -m pip install -e ".[dev]"
+      - run: npm ci --prefix tools/pi-runtime --ignore-scripts --no-audit --no-fund
+      - run: python -m pytest -q
+      - run: node --test tests/pi_workflow/transport.test.mjs tests/pi_workflow/retry.test.mjs
+      - run: node tests/editor_v1/test_state.cjs
+      - run: npm ci --prefix tests --ignore-scripts --no-audit --no-fund
+      - name: Install Chromium on Linux
+        if: runner.os == 'Linux'
+        run: npm exec --prefix tests -- playwright install --with-deps chromium
+      - name: Install Chromium on Windows
+        if: runner.os == 'Windows'
+        run: npm exec --prefix tests -- playwright install chromium
+      - run: node tests/pi_workflow/test_web.cjs
+      - run: python scripts/prepare_release.py

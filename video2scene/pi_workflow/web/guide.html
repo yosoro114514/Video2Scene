@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video2Scene · 使用说明</title>
+<style>body{max-width:760px;margin:64px auto;padding:0 24px;background:#f5f7f8;color:#20343f;font:17px/1.8 system-ui}a{color:#246d64}h1{font-size:36px}h2{margin-top:36px}li{margin:12px 0}code{background:#e5ecee;padding:2px 5px;border-radius:4px}</style>
+<a href="/workflow/">← 返回工作台</a><h1>从视频到可编辑场景</h1>
+<ol><li>导入视频，在讨论中描述房间和建模目标。</li><li>Pi 查看关键帧、调用相机／深度与分割工具，构建白模。</li><li>在三维场景中核对布局，通过属性面板修改并保存。</li><li>采用当前布局后，精修选中对象，或执行整屋剩余对象精修。</li><li>在“进度与导出”中查看任务与保存版本对应的 Blender／GLB。</li></ol>
+<h2>保存与恢复</h2><p>候选通过验证后才成为保存版本。新整屋批次默认持续调度 3 个对象任务，可选 1–4；完成的资产逐个合并保存，同时按资源额度补入后续任务。暂停后等待 worker 收尾，再恢复；结果不明的调用需要先核对记录。</p>
+<h2>运行条件</h2><p>完整流程需要已配置的 Blender、Pi／Codex、ViPE 和 SAM。运行 <code>python -m video2scene check --mode workbench</code> 检查本地条件，安装和认证限制见源码中的 <code>docs/INSTALLATION.md</code> 与 <code>docs/CONFIGURATION.md</code>。</p>
+<h2>输入与结果</h2><p>适用于静态室内场景。尺度通常是估计值，遮挡区域可能由先验补全。选中的图像和文本会发送到所配置的模型服务，运行记录保存在本地输出目录。</p>
+</html>

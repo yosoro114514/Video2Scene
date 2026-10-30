@@ -1,0 +1,2675 @@
+{
+  "notice": "合同 mock；资源 URI 与全零哈希仅为格式示例，不存在实测产物或质量结论。各示例独立，不是一条已执行事务轨迹。",
+  "contract_version": "video2scene/1.0",
+  "positive": [
+    {
+      "name": "model_SceneSnapshot",
+      "type": "SceneSnapshot",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "scene_id": "demo_scene",
+        "revision": "r000",
+        "parent_revision": null,
+        "capture_revision": "cap001",
+        "geometry_revision": "geom001",
+        "world_frame": "scene_y_up",
+        "object_frame": "object_y_up",
+        "unit": "m",
+        "scale_status": "estimated",
+        "scope": "partial_scene",
+        "objects": [
+          {
+            "instance_id": "table_00",
+            "kind": "support",
+            "category": "table",
+            "transform": {
+              "translation_m": [
+                0,
+                0,
+                0
+              ],
+              "rotation_xyzw": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "local_bounds_m": {
+              "min": [
+                -0.6,
+                0,
+                -0.4
+              ],
+              "max": [
+                0.6,
+                0.75,
+                0.4
+              ]
+            },
+            "support_id": null,
+            "asset": {
+              "asset_version": "table_white_v1",
+              "artifact": {
+                "uri": "artifact://demo_scene/assets/table.glb",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "media_type": "model/gltf-binary",
+                "role": "asset"
+              },
+              "native_frame": "asset_y_up",
+              "native_to_object": [
+                [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ]
+            },
+            "field_state": {
+              "category": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.translation_m": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.rotation_xyzw": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.scale": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "support_id": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.geometry": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.materials": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              }
+            },
+            "evidence_ids": [],
+            "geometry_source": "mixed"
+          },
+          {
+            "instance_id": "t001",
+            "kind": "object",
+            "category": "mug",
+            "transform": {
+              "translation_m": [
+                0,
+                0.75,
+                0
+              ],
+              "rotation_xyzw": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "local_bounds_m": {
+              "min": [
+                -0.04,
+                0,
+                -0.04
+              ],
+              "max": [
+                0.04,
+                0.1,
+                0.04
+              ]
+            },
+            "support_id": "table_00",
+            "asset": {
+              "asset_version": "mug_white_v1",
+              "artifact": {
+                "uri": "artifact://demo_scene/assets/mug.glb",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "media_type": "model/gltf-binary",
+                "role": "asset"
+              },
+              "native_frame": "asset_y_up",
+              "native_to_object": [
+                [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ]
+            },
+            "field_state": {
+              "category": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.translation_m": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.rotation_xyzw": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.scale": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "support_id": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.geometry": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.materials": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              }
+            },
+            "evidence_ids": [],
+            "geometry_source": "mixed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "model_SceneView",
+      "type": "SceneView",
+      "value": {
+        "head": {
+          "revision": "r000",
+          "head_seq": 0
+        },
+        "snapshot": {
+          "contract_version": "video2scene/1.0",
+          "scene_id": "demo_scene",
+          "revision": "r000",
+          "parent_revision": null,
+          "capture_revision": "cap001",
+          "geometry_revision": "geom001",
+          "world_frame": "scene_y_up",
+          "object_frame": "object_y_up",
+          "unit": "m",
+          "scale_status": "estimated",
+          "scope": "partial_scene",
+          "objects": [
+            {
+              "instance_id": "table_00",
+              "kind": "support",
+              "category": "table",
+              "transform": {
+                "translation_m": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation_xyzw": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "local_bounds_m": {
+                "min": [
+                  -0.6,
+                  0,
+                  -0.4
+                ],
+                "max": [
+                  0.6,
+                  0.75,
+                  0.4
+                ]
+              },
+              "support_id": null,
+              "asset": {
+                "asset_version": "table_white_v1",
+                "artifact": {
+                  "uri": "artifact://demo_scene/assets/table.glb",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "media_type": "model/gltf-binary",
+                  "role": "asset"
+                },
+                "native_frame": "asset_y_up",
+                "native_to_object": [
+                  [
+                    1,
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              },
+              "field_state": {
+                "category": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.translation_m": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.rotation_xyzw": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.scale": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "support_id": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "asset.geometry": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "asset.materials": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                }
+              },
+              "evidence_ids": [],
+              "geometry_source": "mixed"
+            },
+            {
+              "instance_id": "t001",
+              "kind": "object",
+              "category": "mug",
+              "transform": {
+                "translation_m": [
+                  0,
+                  0.75,
+                  0
+                ],
+                "rotation_xyzw": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "local_bounds_m": {
+                "min": [
+                  -0.04,
+                  0,
+                  -0.04
+                ],
+                "max": [
+                  0.04,
+                  0.1,
+                  0.04
+                ]
+              },
+              "support_id": "table_00",
+              "asset": {
+                "asset_version": "mug_white_v1",
+                "artifact": {
+                  "uri": "artifact://demo_scene/assets/mug.glb",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "media_type": "model/gltf-binary",
+                  "role": "asset"
+                },
+                "native_frame": "asset_y_up",
+                "native_to_object": [
+                  [
+                    1,
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              },
+              "field_state": {
+                "category": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.translation_m": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.rotation_xyzw": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.scale": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "support_id": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "asset.geometry": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "asset.materials": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                }
+              },
+              "evidence_ids": [],
+              "geometry_source": "mixed"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "model_SceneDraft",
+      "type": "SceneDraft",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "scene_id": "demo_scene",
+        "capture_revision": "cap001",
+        "geometry_revision": "geom001",
+        "world_frame": "scene_y_up",
+        "object_frame": "object_y_up",
+        "unit": "m",
+        "scale_status": "estimated",
+        "scope": "partial_scene",
+        "objects": [
+          {
+            "instance_id": "table_00",
+            "kind": "support",
+            "category": "table",
+            "transform": {
+              "translation_m": [
+                0,
+                0,
+                0
+              ],
+              "rotation_xyzw": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "local_bounds_m": {
+              "min": [
+                -0.6,
+                0,
+                -0.4
+              ],
+              "max": [
+                0.6,
+                0.75,
+                0.4
+              ]
+            },
+            "support_id": null,
+            "asset": {
+              "asset_version": "table_white_v1",
+              "artifact": {
+                "uri": "artifact://demo_scene/assets/table.glb",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "media_type": "model/gltf-binary",
+                "role": "asset"
+              },
+              "native_frame": "asset_y_up",
+              "native_to_object": [
+                [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ]
+            },
+            "field_state": {
+              "category": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.translation_m": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.rotation_xyzw": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.scale": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "support_id": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.geometry": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.materials": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              }
+            },
+            "evidence_ids": [],
+            "geometry_source": "mixed"
+          },
+          {
+            "instance_id": "t001",
+            "kind": "object",
+            "category": "mug",
+            "transform": {
+              "translation_m": [
+                0,
+                0.75,
+                0
+              ],
+              "rotation_xyzw": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "local_bounds_m": {
+              "min": [
+                -0.04,
+                0,
+                -0.04
+              ],
+              "max": [
+                0.04,
+                0.1,
+                0.04
+              ]
+            },
+            "support_id": "table_00",
+            "asset": {
+              "asset_version": "mug_white_v1",
+              "artifact": {
+                "uri": "artifact://demo_scene/assets/mug.glb",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "media_type": "model/gltf-binary",
+                "role": "asset"
+              },
+              "native_frame": "asset_y_up",
+              "native_to_object": [
+                [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ]
+            },
+            "field_state": {
+              "category": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.translation_m": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.rotation_xyzw": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.scale": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "support_id": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.geometry": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.materials": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              }
+            },
+            "evidence_ids": [],
+            "geometry_source": "mixed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "model_EvidenceBundle",
+      "type": "EvidenceBundle",
+      "value": {
+        "evidence_id": "ev001",
+        "scene_id": "demo_scene",
+        "scene_revision": "r000",
+        "capture_revision": "cap001",
+        "geometry_revision": "geom001",
+        "target_ids": [
+          "t001"
+        ],
+        "purpose": "refine",
+        "frames": [
+          {
+            "source_frame_id": "frame_00000",
+            "source_time_s": null,
+            "preview_time_s": 0,
+            "width": 640,
+            "height": 480,
+            "rgb": {
+              "uri": "artifact://demo_scene/capture/00000.jpg",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "media_type": "image/jpeg",
+              "role": "rgb"
+            },
+            "mask": null,
+            "K": [
+              [
+                500,
+                0,
+                320
+              ],
+              [
+                0,
+                500,
+                240
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ],
+            "c2w": [
+              [
+                1,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                1
+              ]
+            ],
+            "source_to_image": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ],
+            "selection_reason": "契约演示帧，非实测选择"
+          }
+        ],
+        "evidence_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "name": "model_CandidateRef",
+      "type": "CandidateRef",
+      "value": {
+        "candidate_id": "cand001",
+        "scene_id": "demo_scene",
+        "base_revision": "r000",
+        "base_head_seq": 0,
+        "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "state": "staged"
+      }
+    },
+    {
+      "name": "model_CandidateSnapshot",
+      "type": "CandidateSnapshot",
+      "value": {
+        "candidate": {
+          "candidate_id": "cand001",
+          "scene_id": "demo_scene",
+          "base_revision": "r000",
+          "base_head_seq": 0,
+          "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "state": "staged"
+        },
+        "scene": {
+          "contract_version": "video2scene/1.0",
+          "scene_id": "demo_scene",
+          "capture_revision": "cap001",
+          "geometry_revision": "geom001",
+          "world_frame": "scene_y_up",
+          "object_frame": "object_y_up",
+          "unit": "m",
+          "scale_status": "estimated",
+          "scope": "partial_scene",
+          "objects": [
+            {
+              "instance_id": "table_00",
+              "kind": "support",
+              "category": "table",
+              "transform": {
+                "translation_m": [
+                  0,
+                  0,
+                  0
+                ],
+                "rotation_xyzw": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "local_bounds_m": {
+                "min": [
+                  -0.6,
+                  0,
+                  -0.4
+                ],
+                "max": [
+                  0.6,
+                  0.75,
+                  0.4
+                ]
+              },
+              "support_id": null,
+              "asset": {
+                "asset_version": "table_white_v1",
+                "artifact": {
+                  "uri": "artifact://demo_scene/assets/table.glb",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "media_type": "model/gltf-binary",
+                  "role": "asset"
+                },
+                "native_frame": "asset_y_up",
+                "native_to_object": [
+                  [
+                    1,
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              },
+              "field_state": {
+                "category": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.translation_m": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.rotation_xyzw": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.scale": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "support_id": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "asset.geometry": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "asset.materials": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                }
+              },
+              "evidence_ids": [],
+              "geometry_source": "mixed"
+            },
+            {
+              "instance_id": "t001",
+              "kind": "object",
+              "category": "mug",
+              "transform": {
+                "translation_m": [
+                  0,
+                  0.75,
+                  0
+                ],
+                "rotation_xyzw": [
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "local_bounds_m": {
+                "min": [
+                  -0.04,
+                  0,
+                  -0.04
+                ],
+                "max": [
+                  0.04,
+                  0.1,
+                  0.04
+                ]
+              },
+              "support_id": "table_00",
+              "asset": {
+                "asset_version": "mug_white_v1",
+                "artifact": {
+                  "uri": "artifact://demo_scene/assets/mug.glb",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "media_type": "model/gltf-binary",
+                  "role": "asset"
+                },
+                "native_frame": "asset_y_up",
+                "native_to_object": [
+                  [
+                    1,
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    1,
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    0,
+                    0,
+                    1
+                  ]
+                ]
+              },
+              "field_state": {
+                "category": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.translation_m": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.rotation_xyzw": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "transform.scale": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "support_id": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "asset.geometry": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                },
+                "asset.materials": {
+                  "source": "observed",
+                  "locked": false,
+                  "decision_ref": null
+                }
+              },
+              "evidence_ids": [],
+              "geometry_source": "mixed"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "model_BuildOutput",
+      "type": "BuildOutput",
+      "value": {
+        "artifact_refs": [
+          {
+            "uri": "artifact://demo_scene/assets/mug_fine.glb",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "media_type": "model/gltf-binary",
+            "role": "asset"
+          }
+        ],
+        "asset_updates": [
+          {
+            "instance_id": "t001",
+            "asset": {
+              "asset_version": "mug_fine_v1",
+              "artifact": {
+                "uri": "artifact://demo_scene/assets/mug_fine.glb",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "media_type": "model/gltf-binary",
+                "role": "asset"
+              },
+              "native_frame": "asset_y_up",
+              "native_to_object": [
+                [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ]
+            },
+            "local_bounds_m": {
+              "min": [
+                -0.04,
+                0,
+                -0.04
+              ],
+              "max": [
+                0.04,
+                0.1,
+                0.04
+              ]
+            }
+          }
+        ],
+        "input_fingerprint": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "name": "model_BuildResult",
+      "type": "BuildResult",
+      "value": {
+        "candidate": {
+          "candidate_id": "cand002",
+          "scene_id": "demo_scene",
+          "base_revision": "r000",
+          "base_head_seq": 0,
+          "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "state": "built"
+        },
+        "artifact_refs": [
+          {
+            "uri": "artifact://demo_scene/assets/mug_fine.glb",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "media_type": "model/gltf-binary",
+            "role": "asset"
+          }
+        ]
+      }
+    },
+    {
+      "name": "model_RenderReport",
+      "type": "RenderReport",
+      "value": {
+        "candidate_id": "cand002",
+        "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "evidence_id": "ev001",
+        "evidence_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "frame_ids": [
+          "frame_00000"
+        ],
+        "view_mode": "normal",
+        "camera_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "artifact_refs": [
+          {
+            "uri": "artifact://demo_scene/renders/compare.png",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "media_type": "image/png",
+            "role": "comparison"
+          }
+        ]
+      }
+    },
+    {
+      "name": "model_ValidationReport",
+      "type": "ValidationReport",
+      "value": {
+        "validation_id": "val001",
+        "candidate_id": "cand002",
+        "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "evidence_id": "ev001",
+        "evidence_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "criteria_id": "tabletop_design_v1",
+        "criteria_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "intent": "design_edit",
+        "technical_pass": true,
+        "visual_pass": null,
+        "committable": true,
+        "checks": [
+          {
+            "name": "scope_and_support",
+            "passed": true,
+            "severity": "info",
+            "details": "仅为 mock，视觉检查在该示例标准中不适用",
+            "artifact_refs": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "model_CollisionReport",
+      "type": "CollisionReport",
+      "value": {
+        "candidate_id": "cand002",
+        "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "method": "box",
+        "passed": true,
+        "checks": []
+      }
+    },
+    {
+      "name": "model_CommitResult",
+      "type": "CommitResult",
+      "value": {
+        "revision": "r001",
+        "previous_revision": "r000",
+        "head_seq": 1,
+        "event_id": "evt001"
+      }
+    },
+    {
+      "name": "model_HistoryResult",
+      "type": "HistoryResult",
+      "value": {
+        "head": {
+          "revision": "r000",
+          "head_seq": 0
+        },
+        "entries": [
+          {
+            "revision": "r000",
+            "parent_revision": null,
+            "operation": "import",
+            "created_at": "2026-10-28T08:00:00Z"
+          }
+        ],
+        "can_undo": false,
+        "can_redo": false
+      }
+    },
+    {
+      "name": "model_JobRecord",
+      "type": "JobRecord",
+      "value": {
+        "job_id": "job001",
+        "scene_id": "demo_scene",
+        "base_revision": "r000",
+        "base_head_seq": 0,
+        "request_id": "req_refine",
+        "state": "queued",
+        "progress": null,
+        "result": null,
+        "error": null
+      }
+    },
+    {
+      "name": "model_ProviderCapabilities",
+      "type": "ProviderCapabilities",
+      "value": {
+        "vision": true,
+        "tool_calling": true,
+        "streaming": true,
+        "cancel": true,
+        "resume": true
+      }
+    },
+    {
+      "name": "model_SessionSpec",
+      "type": "SessionSpec",
+      "value": {
+        "session_id": "session001",
+        "scene_id": "demo_scene",
+        "model": "configured-provider-model",
+        "instruction": "把杯子向右移动三厘米",
+        "base_revision": "r000",
+        "base_head_seq": 0,
+        "allowed_tools": [
+          "inspect_scene",
+          "apply_scene_patch",
+          "validate_candidate",
+          "commit_candidate"
+        ],
+        "target_ids": [
+          "t001"
+        ],
+        "evidence_ids": [
+          "ev001"
+        ],
+        "budget": {
+          "max_iterations": 3,
+          "timeout_s": 600
+        }
+      }
+    },
+    {
+      "name": "request_inspect_scene",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_inspect_scene",
+        "scene_id": "demo_scene",
+        "tool": "inspect_scene",
+        "params": {
+          "revision": "head"
+        }
+      }
+    },
+    {
+      "name": "response_inspect_scene",
+      "type": "ToolResponse",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_inspect_scene",
+        "scene_id": "demo_scene",
+        "tool": "inspect_scene",
+        "status": "ok",
+        "result": {
+          "head": {
+            "revision": "r000",
+            "head_seq": 0
+          },
+          "snapshot": {
+            "contract_version": "video2scene/1.0",
+            "scene_id": "demo_scene",
+            "revision": "r000",
+            "parent_revision": null,
+            "capture_revision": "cap001",
+            "geometry_revision": "geom001",
+            "world_frame": "scene_y_up",
+            "object_frame": "object_y_up",
+            "unit": "m",
+            "scale_status": "estimated",
+            "scope": "partial_scene",
+            "objects": [
+              {
+                "instance_id": "table_00",
+                "kind": "support",
+                "category": "table",
+                "transform": {
+                  "translation_m": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "rotation_xyzw": [
+                    0,
+                    0,
+                    0,
+                    1
+                  ],
+                  "scale": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "local_bounds_m": {
+                  "min": [
+                    -0.6,
+                    0,
+                    -0.4
+                  ],
+                  "max": [
+                    0.6,
+                    0.75,
+                    0.4
+                  ]
+                },
+                "support_id": null,
+                "asset": {
+                  "asset_version": "table_white_v1",
+                  "artifact": {
+                    "uri": "artifact://demo_scene/assets/table.glb",
+                    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                    "media_type": "model/gltf-binary",
+                    "role": "asset"
+                  },
+                  "native_frame": "asset_y_up",
+                  "native_to_object": [
+                    [
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1,
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0,
+                      1,
+                      0
+                    ],
+                    [
+                      0,
+                      0,
+                      0,
+                      1
+                    ]
+                  ]
+                },
+                "field_state": {
+                  "category": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "transform.translation_m": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "transform.rotation_xyzw": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "transform.scale": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "support_id": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "asset.geometry": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "asset.materials": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  }
+                },
+                "evidence_ids": [],
+                "geometry_source": "mixed"
+              },
+              {
+                "instance_id": "t001",
+                "kind": "object",
+                "category": "mug",
+                "transform": {
+                  "translation_m": [
+                    0,
+                    0.75,
+                    0
+                  ],
+                  "rotation_xyzw": [
+                    0,
+                    0,
+                    0,
+                    1
+                  ],
+                  "scale": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "local_bounds_m": {
+                  "min": [
+                    -0.04,
+                    0,
+                    -0.04
+                  ],
+                  "max": [
+                    0.04,
+                    0.1,
+                    0.04
+                  ]
+                },
+                "support_id": "table_00",
+                "asset": {
+                  "asset_version": "mug_white_v1",
+                  "artifact": {
+                    "uri": "artifact://demo_scene/assets/mug.glb",
+                    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                    "media_type": "model/gltf-binary",
+                    "role": "asset"
+                  },
+                  "native_frame": "asset_y_up",
+                  "native_to_object": [
+                    [
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      1,
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0,
+                      1,
+                      0
+                    ],
+                    [
+                      0,
+                      0,
+                      0,
+                      1
+                    ]
+                  ]
+                },
+                "field_state": {
+                  "category": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "transform.translation_m": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "transform.rotation_xyzw": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "transform.scale": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "support_id": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "asset.geometry": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  },
+                  "asset.materials": {
+                    "source": "observed",
+                    "locked": false,
+                    "decision_ref": null
+                  }
+                },
+                "evidence_ids": [],
+                "geometry_source": "mixed"
+              }
+            ]
+          }
+        },
+        "error": null,
+        "warnings": []
+      }
+    },
+    {
+      "name": "request_select_evidence",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_select_evidence",
+        "scene_id": "demo_scene",
+        "tool": "select_evidence",
+        "params": {
+          "revision": "r000",
+          "target_ids": [
+            "t001"
+          ],
+          "purpose": "refine",
+          "n": 3
+        }
+      }
+    },
+    {
+      "name": "response_select_evidence",
+      "type": "ToolResponse",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_select_evidence",
+        "scene_id": "demo_scene",
+        "tool": "select_evidence",
+        "status": "ok",
+        "result": {
+          "evidence_id": "ev001",
+          "scene_id": "demo_scene",
+          "scene_revision": "r000",
+          "capture_revision": "cap001",
+          "geometry_revision": "geom001",
+          "target_ids": [
+            "t001"
+          ],
+          "purpose": "refine",
+          "frames": [
+            {
+              "source_frame_id": "frame_00000",
+              "source_time_s": null,
+              "preview_time_s": 0,
+              "width": 640,
+              "height": 480,
+              "rgb": {
+                "uri": "artifact://demo_scene/capture/00000.jpg",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "media_type": "image/jpeg",
+                "role": "rgb"
+              },
+              "mask": null,
+              "K": [
+                [
+                  500,
+                  0,
+                  320
+                ],
+                [
+                  0,
+                  500,
+                  240
+                ],
+                [
+                  0,
+                  0,
+                  1
+                ]
+              ],
+              "c2w": [
+                [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ],
+              "source_to_image": [
+                [
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1
+                ]
+              ],
+              "selection_reason": "契约演示帧，非实测选择"
+            }
+          ],
+          "evidence_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "error": null,
+        "warnings": []
+      }
+    },
+    {
+      "name": "request_apply_scene_patch",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_apply_scene_patch",
+        "scene_id": "demo_scene",
+        "tool": "apply_scene_patch",
+        "params": {
+          "intent": "design_edit",
+          "edits": [
+            {
+              "instance_id": "t001",
+              "field": "transform.translation_m",
+              "value": [
+                0.03,
+                0.75,
+                0
+              ]
+            }
+          ],
+          "decision_ref": "user_cmd001"
+        },
+        "base_revision": "r000",
+        "base_head_seq": 0
+      }
+    },
+    {
+      "name": "response_apply_scene_patch",
+      "type": "ToolResponse",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_apply_scene_patch",
+        "scene_id": "demo_scene",
+        "tool": "apply_scene_patch",
+        "status": "ok",
+        "result": {
+          "candidate_id": "cand001",
+          "scene_id": "demo_scene",
+          "base_revision": "r000",
+          "base_head_seq": 0,
+          "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "state": "staged"
+        },
+        "error": null,
+        "warnings": []
+      }
+    },
+    {
+      "name": "request_build_whitebox",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_build_whitebox",
+        "scene_id": "demo_scene",
+        "tool": "build_whitebox",
+        "params": {
+          "candidate_id": "cand001",
+          "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      }
+    },
+    {
+      "name": "response_build_whitebox",
+      "type": "ToolResponse",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_build_whitebox",
+        "scene_id": "demo_scene",
+        "tool": "build_whitebox",
+        "status": "ok",
+        "result": {
+          "candidate": {
+            "candidate_id": "cand002",
+            "scene_id": "demo_scene",
+            "base_revision": "r000",
+            "base_head_seq": 0,
+            "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "state": "built"
+          },
+          "artifact_refs": [
+            {
+              "uri": "artifact://demo_scene/assets/mug_fine.glb",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "media_type": "model/gltf-binary",
+              "role": "asset"
+            }
+          ]
+        },
+        "error": null,
+        "warnings": []
+      }
+    },
+    {
+      "name": "request_refine_asset",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_refine_asset",
+        "scene_id": "demo_scene",
+        "tool": "refine_asset",
+        "params": {
+          "target_id": "t001",
+          "intent": "reconstruction_correction",
+          "allowed_fields": [
+            "asset.geometry",
+            "asset.materials"
+          ],
+          "evidence_id": "ev001",
+          "constraints": {
+            "keep_root_transform": true,
+            "keep_support": true,
+            "keep_bounds": true
+          },
+          "budget": {
+            "max_iterations": 3,
+            "timeout_s": 600
+          },
+          "decision_ref": "user_cmd002"
+        },
+        "base_revision": "r000",
+        "base_head_seq": 0
+      }
+    },
+    {
+      "name": "response_refine_asset",
+      "type": "ToolResponse",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_refine_asset",
+        "scene_id": "demo_scene",
+        "tool": "refine_asset",
+        "status": "accepted",
+        "result": {
+          "job_id": "job001",
+          "state": "queued"
+        },
+        "error": null,
+        "warnings": []
+      }
+    },
+    {
+      "name": "request_render_compare",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_render_compare",
+        "scene_id": "demo_scene",
+        "tool": "render_compare",
+        "params": {
+          "candidate_id": "cand002",
+          "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "frame_ids": [
+            "frame_00000"
+          ],
+          "view_mode": "normal"
+        }
+      }
+    },
+    {
+      "name": "response_render_compare",
+      "type": "ToolResponse",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_render_compare",
+        "scene_id": "demo_scene",
+        "tool": "render_compare",
+        "status": "ok",
+        "result": {
+          "candidate_id": "cand002",
+          "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "evidence_id": "ev001",
+          "evidence_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "frame_ids": [
+            "frame_00000"
+          ],
+          "view_mode": "normal",
+          "camera_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "artifact_refs": [
+            {
+              "uri": "artifact://demo_scene/renders/compare.png",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "media_type": "image/png",
+              "role": "comparison"
+            }
+          ]
+        },
+        "error": null,
+        "warnings": []
+      }
+    },
+    {
+      "name": "request_validate_candidate",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_validate_candidate",
+        "scene_id": "demo_scene",
+        "tool": "validate_candidate",
+        "params": {
+          "candidate_id": "cand002",
+          "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "evidence_id": "ev001",
+          "intent": "design_edit",
+          "criteria_id": "tabletop_design_v1"
+        }
+      }
+    },
+    {
+      "name": "response_validate_candidate",
+      "type": "ToolResponse",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_validate_candidate",
+        "scene_id": "demo_scene",
+        "tool": "validate_candidate",
+        "status": "ok",
+        "result": {
+          "validation_id": "val001",
+          "candidate_id": "cand002",
+          "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "evidence_id": "ev001",
+          "evidence_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "criteria_id": "tabletop_design_v1",
+          "criteria_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "intent": "design_edit",
+          "technical_pass": true,
+          "visual_pass": null,
+          "committable": true,
+          "checks": [
+            {
+              "name": "scope_and_support",
+              "passed": true,
+              "severity": "info",
+              "details": "仅为 mock，视觉检查在该示例标准中不适用",
+              "artifact_refs": []
+            }
+          ]
+        },
+        "error": null,
+        "warnings": []
+      }
+    },
+    {
+      "name": "request_commit_candidate",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_commit_candidate",
+        "scene_id": "demo_scene",
+        "tool": "commit_candidate",
+        "params": {
+          "candidate_id": "cand002",
+          "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "validation_id": "val001",
+          "decision_ref": "user_cmd001"
+        },
+        "base_revision": "r000",
+        "base_head_seq": 0
+      }
+    },
+    {
+      "name": "response_commit_candidate",
+      "type": "ToolResponse",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_commit_candidate",
+        "scene_id": "demo_scene",
+        "tool": "commit_candidate",
+        "status": "ok",
+        "result": {
+          "revision": "r001",
+          "previous_revision": "r000",
+          "head_seq": 1,
+          "event_id": "evt001"
+        },
+        "error": null,
+        "warnings": []
+      }
+    },
+    {
+      "name": "request_revision_history",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_revision_history",
+        "scene_id": "demo_scene",
+        "tool": "revision_history",
+        "params": {
+          "action": "list",
+          "limit": 20
+        }
+      }
+    },
+    {
+      "name": "response_revision_history",
+      "type": "ToolResponse",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_revision_history",
+        "scene_id": "demo_scene",
+        "tool": "revision_history",
+        "status": "ok",
+        "result": {
+          "head": {
+            "revision": "r000",
+            "head_seq": 0
+          },
+          "entries": [
+            {
+              "revision": "r000",
+              "parent_revision": null,
+              "operation": "import",
+              "created_at": "2026-10-28T08:00:00Z"
+            }
+          ],
+          "can_undo": false,
+          "can_redo": false
+        },
+        "error": null,
+        "warnings": []
+      }
+    },
+    {
+      "name": "request_job_control",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_job_control",
+        "scene_id": "demo_scene",
+        "tool": "job_control",
+        "params": {
+          "job_id": "job001",
+          "action": "status"
+        }
+      }
+    },
+    {
+      "name": "response_job_control",
+      "type": "ToolResponse",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_job_control",
+        "scene_id": "demo_scene",
+        "tool": "job_control",
+        "status": "ok",
+        "result": {
+          "job_id": "job001",
+          "scene_id": "demo_scene",
+          "base_revision": "r000",
+          "base_head_seq": 0,
+          "request_id": "req_refine",
+          "state": "queued",
+          "progress": null,
+          "result": null,
+          "error": null
+        },
+        "error": null,
+        "warnings": []
+      }
+    },
+    {
+      "name": "request_history_undo",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_undo",
+        "scene_id": "demo_scene",
+        "tool": "revision_history",
+        "params": {
+          "action": "undo",
+          "decision_ref": "user_undo"
+        },
+        "base_revision": "r001",
+        "base_head_seq": 1
+      }
+    },
+    {
+      "name": "request_history_redo",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_redo",
+        "scene_id": "demo_scene",
+        "tool": "revision_history",
+        "params": {
+          "action": "redo",
+          "decision_ref": "user_redo"
+        },
+        "base_revision": "r001",
+        "base_head_seq": 1
+      }
+    },
+    {
+      "name": "response_stale",
+      "type": "ToolResponse",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_commit_stale",
+        "scene_id": "demo_scene",
+        "tool": "commit_candidate",
+        "status": "error",
+        "result": null,
+        "error": {
+          "code": "STALE_REVISION",
+          "message": "当前场景已变化，请读取新版本",
+          "retryable": false,
+          "details": {
+            "expected": {
+              "revision": "r000",
+              "head_seq": 0
+            },
+            "actual": {
+              "revision": "r000",
+              "head_seq": 2
+            }
+          }
+        },
+        "warnings": []
+      }
+    },
+    {
+      "name": "api_error",
+      "type": "ApiError",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "error": {
+          "code": "STALE_REVISION",
+          "message": "当前场景已变化，请读取新版本",
+          "retryable": false,
+          "details": {
+            "expected": {
+              "revision": "r000",
+              "head_seq": 0
+            },
+            "actual": {
+              "revision": "r000",
+              "head_seq": 2
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "command_language",
+      "type": "UserCommand",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "command_id": "cmd001",
+        "session_id": "session001",
+        "scene_id": "demo_scene",
+        "base_revision": "r000",
+        "base_head_seq": 0,
+        "selected_ids": [
+          "t001"
+        ],
+        "intent": "design_edit",
+        "kind": "language",
+        "text": "把选中的杯子向右移动三厘米"
+      }
+    },
+    {
+      "name": "command_receipt",
+      "type": "CommandReceipt",
+      "value": {
+        "command_id": "cmd001",
+        "operation_id": "op001",
+        "state": "accepted"
+      }
+    },
+    {
+      "name": "command_record",
+      "type": "CommandRecord",
+      "value": {
+        "receipt": {
+          "command_id": "cmd001",
+          "operation_id": "op001",
+          "state": "accepted"
+        },
+        "state": "needs_clarification",
+        "request_ids": [],
+        "message": "向右是屏幕右侧还是场景 X 轴方向？",
+        "error": null
+      }
+    },
+    {
+      "name": "event_head",
+      "type": "SceneEvent",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "event_id": "evt001",
+        "scene_id": "demo_scene",
+        "seq": 1,
+        "type": "scene.head_changed",
+        "occurred_at": "2026-10-28T08:00:00Z",
+        "request_id": "req_commit_candidate",
+        "data": {
+          "revision": "r001",
+          "previous_revision": "r000",
+          "head_seq": 1,
+          "event_id": "evt001"
+        }
+      }
+    },
+    {
+      "name": "event_agent",
+      "type": "AgentEvent",
+      "value": {
+        "session_id": "session001",
+        "type": "needs_clarification",
+        "data": {
+          "question": "请说明移动方向和距离"
+        }
+      }
+    }
+  ],
+  "negative": [
+    {
+      "name": "missing_head_seq",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_apply_scene_patch",
+        "scene_id": "demo_scene",
+        "tool": "apply_scene_patch",
+        "params": {
+          "intent": "design_edit",
+          "edits": [
+            {
+              "instance_id": "t001",
+              "field": "transform.translation_m",
+              "value": [
+                0.03,
+                0.75,
+                0
+              ]
+            }
+          ],
+          "decision_ref": "user_cmd001"
+        },
+        "base_revision": "r000"
+      },
+      "expected": "reject_schema"
+    },
+    {
+      "name": "arbitrary_patch_field",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_apply_scene_patch",
+        "scene_id": "demo_scene",
+        "tool": "apply_scene_patch",
+        "params": {
+          "intent": "design_edit",
+          "edits": [
+            {
+              "instance_id": "t001",
+              "field": "arbitrary_python",
+              "value": [
+                0.03,
+                0.75,
+                0
+              ]
+            }
+          ],
+          "decision_ref": "user_cmd001"
+        },
+        "base_revision": "r000",
+        "base_head_seq": 0
+      },
+      "expected": "reject_schema"
+    },
+    {
+      "name": "negative_scale",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_apply_scene_patch",
+        "scene_id": "demo_scene",
+        "tool": "apply_scene_patch",
+        "params": {
+          "intent": "design_edit",
+          "edits": [
+            {
+              "instance_id": "t001",
+              "field": "transform.scale",
+              "value": [
+                1,
+                -1,
+                1
+              ]
+            }
+          ],
+          "decision_ref": "user_cmd001"
+        },
+        "base_revision": "r000",
+        "base_head_seq": 0
+      },
+      "expected": "reject_schema"
+    },
+    {
+      "name": "unknown_request_field",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_inspect_scene",
+        "scene_id": "demo_scene",
+        "tool": "inspect_scene",
+        "params": {
+          "revision": "head"
+        },
+        "unregistered_param": 1
+      },
+      "expected": "reject_schema"
+    },
+    {
+      "name": "unknown_view_mode",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_render_compare",
+        "scene_id": "demo_scene",
+        "tool": "render_compare",
+        "params": {
+          "candidate_id": "cand002",
+          "candidate_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "frame_ids": [
+            "frame_00000"
+          ],
+          "view_mode": "approximate_camera"
+        }
+      },
+      "expected": "reject_schema"
+    },
+    {
+      "name": "wrong_world_frame",
+      "type": "SceneSnapshot",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "scene_id": "demo_scene",
+        "revision": "r000",
+        "parent_revision": null,
+        "capture_revision": "cap001",
+        "geometry_revision": "geom001",
+        "world_frame": "blender_z_up",
+        "object_frame": "object_y_up",
+        "unit": "m",
+        "scale_status": "estimated",
+        "scope": "partial_scene",
+        "objects": [
+          {
+            "instance_id": "table_00",
+            "kind": "support",
+            "category": "table",
+            "transform": {
+              "translation_m": [
+                0,
+                0,
+                0
+              ],
+              "rotation_xyzw": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "local_bounds_m": {
+              "min": [
+                -0.6,
+                0,
+                -0.4
+              ],
+              "max": [
+                0.6,
+                0.75,
+                0.4
+              ]
+            },
+            "support_id": null,
+            "asset": {
+              "asset_version": "table_white_v1",
+              "artifact": {
+                "uri": "artifact://demo_scene/assets/table.glb",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "media_type": "model/gltf-binary",
+                "role": "asset"
+              },
+              "native_frame": "asset_y_up",
+              "native_to_object": [
+                [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ]
+            },
+            "field_state": {
+              "category": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.translation_m": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.rotation_xyzw": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.scale": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "support_id": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.geometry": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.materials": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              }
+            },
+            "evidence_ids": [],
+            "geometry_source": "mixed"
+          },
+          {
+            "instance_id": "t001",
+            "kind": "object",
+            "category": "mug",
+            "transform": {
+              "translation_m": [
+                0,
+                0.75,
+                0
+              ],
+              "rotation_xyzw": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "local_bounds_m": {
+              "min": [
+                -0.04,
+                0,
+                -0.04
+              ],
+              "max": [
+                0.04,
+                0.1,
+                0.04
+              ]
+            },
+            "support_id": "table_00",
+            "asset": {
+              "asset_version": "mug_white_v1",
+              "artifact": {
+                "uri": "artifact://demo_scene/assets/mug.glb",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "media_type": "model/gltf-binary",
+                "role": "asset"
+              },
+              "native_frame": "asset_y_up",
+              "native_to_object": [
+                [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ]
+            },
+            "field_state": {
+              "category": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.translation_m": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.rotation_xyzw": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "transform.scale": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "support_id": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.geometry": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              },
+              "asset.materials": {
+                "source": "observed",
+                "locked": false,
+                "decision_ref": null
+              }
+            },
+            "evidence_ids": [],
+            "geometry_source": "mixed"
+          }
+        ]
+      },
+      "expected": "reject_schema"
+    },
+    {
+      "name": "undo_without_base",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_revision_history",
+        "scene_id": "demo_scene",
+        "tool": "revision_history",
+        "params": {
+          "action": "undo",
+          "decision_ref": "user_undo"
+        }
+      },
+      "expected": "reject_schema"
+    },
+    {
+      "name": "successful_job_without_result",
+      "type": "JobRecord",
+      "value": {
+        "job_id": "job001",
+        "scene_id": "demo_scene",
+        "base_revision": "r000",
+        "base_head_seq": 0,
+        "request_id": "req_refine",
+        "state": "succeeded",
+        "progress": null,
+        "result": null,
+        "error": null
+      },
+      "expected": "reject_schema"
+    },
+    {
+      "name": "refine_changes_layout",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_refine_asset",
+        "scene_id": "demo_scene",
+        "tool": "refine_asset",
+        "params": {
+          "target_id": "t001",
+          "intent": "reconstruction_correction",
+          "allowed_fields": [
+            "transform.translation_m"
+          ],
+          "evidence_id": "ev001",
+          "constraints": {
+            "keep_root_transform": true,
+            "keep_support": true,
+            "keep_bounds": true
+          },
+          "budget": {
+            "max_iterations": 3,
+            "timeout_s": 600
+          },
+          "decision_ref": "user_cmd002"
+        },
+        "base_revision": "r000",
+        "base_head_seq": 0
+      },
+      "expected": "reject_schema"
+    },
+    {
+      "name": "wrong_translation_dimensions",
+      "type": "ToolRequest",
+      "value": {
+        "contract_version": "video2scene/1.0",
+        "request_id": "req_apply_scene_patch",
+        "scene_id": "demo_scene",
+        "tool": "apply_scene_patch",
+        "params": {
+          "intent": "design_edit",
+          "edits": [
+            {
+              "instance_id": "t001",
+              "field": "transform.translation_m",
+              "value": [
+                1,
+                2
+              ]
+            }
+          ],
+          "decision_ref": "user_cmd001"
+        },
+        "base_revision": "r000",
+        "base_head_seq": 0
+      },
+      "expected": "reject_schema"
+    }
+  ]
+}

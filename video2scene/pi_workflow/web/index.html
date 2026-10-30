@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Pi 主导的视频到可编辑场景工作流：导入视频、对话、核对白模并继续精修。">
+  <title>Pi · 场景工作流</title><link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <button id="projects-backdrop" class="projects-backdrop" type="button" aria-label="收起项目列表" hidden></button>
+    <aside id="project-sidebar" class="sidebar">
+      <a class="brand" href="/workflow/"><span class="brand-mark">π</span><span>场景工作流<small>VIDEO → EDITABLE SCENE</small></span></a>
+      <button id="new-project" class="primary" type="button"><span aria-hidden="true">＋</span> 新建项目</button>
+      <div class="sidebar-heading"><h2>项目</h2><button id="close-projects" class="text-button" type="button">收起</button><button id="refresh-projects" class="text-button" type="button">刷新</button></div>
+      <nav id="project-list" aria-label="项目列表"><p class="empty">正在读取项目…</p></nav>
+      <p class="sidebar-note">从视频观察空间，保存可修改的场景。模型通过已登录的 Codex 订阅运行。<br><a href="/workflow/guide" target="_blank" rel="noopener">工作流与操作说明 ↗</a></p>
+      <div class="connection"><span id="connection-dot"></span><span id="connection-text" role="status">连接本地服务</span></div>
+    </aside>
+    <main>
+      <div class="mobile-project-bar"><button id="toggle-projects" class="quiet" type="button" aria-controls="project-sidebar" aria-expanded="false">☰ 项目</button><span>Pi · 场景工作流</span></div>
+      <section id="welcome" class="welcome">
+        <p class="eyebrow">PI WORKFLOW</p><h1>从一段视频，开始构建空间</h1>
+        <p>导入视频后，和 Pi 讨论布局与对象。白模就绪时核对、修改并保存，再采用布局继续精修。</p>
+        <button id="welcome-create" class="primary" type="button">导入第一个视频</button>
+        <ol class="welcome-steps"><li><span>01</span>关键帧与场景先验</li><li><span>02</span>分割、深度与白模</li><li><span>03</span>核对布局后精修</li></ol>
+      </section>
+      <div id="project-workspace" hidden>
+        <header class="project-header">
+          <div class="project-heading"><p class="eyebrow">PI WORKFLOW</p><h1 id="project-name">项目</h1><p id="project-source" class="muted"></p></div>
+          <div class="project-actions"><span id="project-phase" class="phase">读取状态</span><button id="pause-run" class="quiet" type="button" hidden>暂停</button><button id="resume-run" class="quiet" type="button" hidden>继续</button><button id="refresh-state" class="quiet" type="button">刷新状态</button><button id="open-activity" class="quiet" type="button" aria-controls="assistant-drawer" aria-expanded="false">进度与导出</button><button id="toggle-chat" class="primary" type="button" aria-controls="assistant-drawer" aria-expanded="false"><span aria-hidden="true">◧</span> 与 Pi 对话 <span id="chat-unread" class="unread-dot" aria-label="有新回复" hidden></span></button></div>
+        </header>
+        <div class="project-meta"><span id="provider-label">Codex 订阅</span><span id="model-label"></span><span id="saved-head">尚未建立场景</span></div>
+        <section id="workflow-progress" class="workflow-progress" aria-labelledby="workflow-progress-title">
+          <div class="workflow-progress-heading"><div><span class="workflow-step-count" id="workflow-step-count"></span><strong id="workflow-progress-title">正在读取进度</strong><span id="workflow-progress-state" class="workflow-progress-state"></span></div><button id="workflow-progress-details" class="text-button" type="button" aria-controls="assistant-drawer">查看详情 ↗</button></div>
+          <ol id="workflow-steps" class="workflow-steps" aria-label="房间建模流程">
+            <li><span class="step-track" aria-hidden="true"></span><span>视频观察</span></li><li><span class="step-track" aria-hidden="true"></span><span>空间分析</span></li><li><span class="step-track" aria-hidden="true"></span><span>构建白模</span></li><li><span class="step-track" aria-hidden="true"></span><span>人工核对</span></li><li><span class="step-track" aria-hidden="true"></span><span>对象精修</span></li><li><span class="step-track" aria-hidden="true"></span><span>导出交付</span></li>
+          </ol>
+          <div class="workflow-current" role="status" aria-live="polite"><p id="workflow-current-task"></p><p id="workflow-counts" class="muted" hidden></p></div>
+          <progress id="workflow-object-progress" max="1" value="0" aria-label="精修对象保存进度" aria-describedby="workflow-counts" hidden></progress>
+        </section>
+        <p id="project-error" class="error" role="alert" hidden></p>
+        <p id="model-retry" class="reconnect-notice" role="status" hidden></p>
+        <section id="whitebox-review" class="review-callout" aria-labelledby="review-title" hidden>
+          <div><p class="eyebrow">REVIEW & CONTINUE</p><h2 id="review-title">白模已准备好，请核对当前布局</h2><p>可在场景中选择对象，打开“对象与属性”修改并保存。点击采用后，Pi 将以该保存布局精修一个推荐对象。</p><p id="approval-note" class="field-note" role="status"></p></div>
+          <button id="approve-whitebox" class="primary" type="button" disabled>采用布局并精修一个推荐对象</button>
+        </section>
+        <div id="scene-layout" class="scene-layout">
+          <section class="editor-section" aria-labelledby="editor-title">
+          <div class="section-heading"><div><h2 id="editor-title">场景</h2></div><a id="open-editor" href="/" target="_blank" rel="noopener" hidden>独立打开编辑器 ↗</a></div>
+          <div id="scene-summary" class="scene-summary"><span id="selected-object">尚未选择对象</span><span id="editor-save-status">等待场景</span></div>
+          <div id="editor-empty" class="editor-empty">白模生成并保存后，三维编辑器会在这里打开。</div>
+          <iframe id="scene-editor" title="当前项目三维场景编辑器" hidden></iframe>
+        </section>
+          <button id="drawer-backdrop" class="drawer-backdrop" type="button" tabindex="-1" aria-label="收起侧栏" hidden></button>
+          <aside id="assistant-drawer" class="assistant-drawer" aria-label="Pi 对话与项目面板" aria-hidden="true" inert>
+            <div class="drawer-heading"><div><span class="drawer-avatar" aria-hidden="true">π</span><strong>Pi 助手</strong></div><button id="close-drawer" class="quiet" type="button" aria-label="收起 Pi 面板">收起 →</button></div>
+            <div class="drawer-tabs" role="tablist" aria-label="Pi 面板内容">
+              <button id="tab-chat" type="button" role="tab" aria-controls="panel-chat" aria-selected="true">对话</button>
+              <button id="tab-progress" type="button" role="tab" aria-controls="panel-progress" aria-selected="false" tabindex="-1">进度与导出</button>
+              <button id="tab-evidence" type="button" role="tab" aria-controls="panel-evidence" aria-selected="false" tabindex="-1">参考资料</button>
+            </div>
+            <div id="panel-chat" class="drawer-panel" role="tabpanel" aria-labelledby="tab-chat">
+              <section class="card chat-card" aria-labelledby="chat-title">
+            <div class="card-heading"><h2 id="chat-title">对话记录</h2><span id="run-status" class="muted">等待指令</span></div>
+            <div id="messages" class="messages" role="log" aria-live="polite"><p class="empty">描述想构建的空间，或指定需要核对的对象。</p></div>
+            <form id="chat-form"><div class="composer-mode"><label for="chat-intent">指令模式</label><select id="chat-intent"><option value="chat" selected>讨论</option><option value="edit_selected">修改选中对象</option><option value="refine_selected">精修选中对象</option></select></div><label class="sr-only" for="chat-input">给 Pi 的指令</label><textarea id="chat-input" rows="3" maxlength="12000" placeholder="例如：先查看关键帧，判断房间形状并构建白模。"></textarea><div class="composer-footer"><span id="chat-context" class="context">当前没有场景选择</span><button id="send-message" class="primary" type="submit">发送</button></div><p id="chat-note" class="field-note">讨论模式用于说明与核对问题。Ctrl / ⌘ + Enter 发送。</p></form>
+          </section>
+            </div>
+            <div id="panel-progress" class="drawer-panel drawer-scroll" role="tabpanel" aria-labelledby="tab-progress" hidden>
+              <section id="batch-refinement" class="card batch-card" aria-labelledby="batch-title" hidden>
+          <div class="card-heading"><div><h2 id="batch-title">整屋精修</h2><p class="muted">对象独立建模与复核，逐个合并保存。保留墙体和布局，跳过已精修对象。</p></div><button id="start-refine-all" class="primary" type="button" disabled>一键精修全部剩余对象</button></div>
+          <div id="batch-config" class="batch-config" hidden><label for="batch-concurrency">对象并发</label><select id="batch-concurrency"><option value="1">1</option><option value="2">2</option><option value="3" selected>3（默认）</option><option value="4">4</option></select><button id="apply-concurrency" class="quiet" type="button" hidden>应用</button><span class="muted">完成一件立即补位，保存串行</span></div>
+          <p id="batch-note" class="field-note" role="status"></p>
+          <div id="batch-progress-area" hidden><label id="batch-progress-label" for="batch-progress"></label><progress id="batch-progress" max="1" value="0"></progress><ol id="batch-targets" class="batch-targets"></ol><p id="batch-error" class="error" hidden></p></div>
+        </section>
+              <section id="export-files" class="card export-card" aria-labelledby="export-title" hidden>
+          <div class="card-heading"><h2 id="export-title">场景文件</h2><span id="export-version" class="export-version"></span></div>
+          <p id="export-note" class="muted"></p><div id="export-links" class="export-links"></div>
+        </section>
+              <section class="card activity-card" aria-labelledby="activity-title">
+            <div class="card-heading"><h2 id="activity-title">工具与作业进度</h2><span id="event-count" class="muted">实际运行记录</span></div>
+            <div id="active-work" class="active-work" hidden><strong id="active-tool"></strong><p id="active-job" class="muted"></p><progress id="job-progress" max="1" hidden></progress></div>
+            <ol id="events" class="events"><li class="empty">尚无工具调用。</li></ol>
+          </section>
+            </div>
+            <div id="panel-evidence" class="drawer-panel drawer-scroll" role="tabpanel" aria-labelledby="tab-evidence" hidden>
+              <section class="card evidence-card" aria-labelledby="evidence-title">
+          <div class="card-heading"><h2 id="evidence-title">关键帧与候选</h2><span class="muted">来自当前项目</span></div>
+          <div id="frames" class="frames"><p class="empty">读取视频后会显示关键帧。</p></div>
+          <div id="candidates" class="candidates"><p class="empty">几何与对象候选会在生成后显示。</p></div>
+        </section>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <p id="global-error" class="error" role="alert" hidden></p>
+      <footer>Pi 组织步骤与工具调用 · 保存版本是布局与对象修改的依据</footer>
+    </main>
+  </div>
+  <dialog id="project-dialog" aria-labelledby="new-project-title">
+    <form id="project-form"><div class="card-heading"><h2 id="new-project-title">新建视频项目</h2><button id="close-dialog" class="text-button" type="button" aria-label="关闭新建项目">关闭</button></div>
+      <label>项目名称<input id="new-name" required maxlength="120" placeholder="例如：客厅重建"></label>
+      <fieldset class="source-options"><legend>视频来源</legend><label><input type="radio" name="source-mode" value="upload" checked> 上传视频文件</label><label><input type="radio" name="source-mode" value="path"> 已准备的本地视频</label></fieldset>
+      <label id="file-field">选择视频<input id="video-file" type="file" accept="video/*,.mp4,.mov,.mkv,.avi,.webm"><span class="field-note">视频上传到当前本地服务，单个文件不超过 2 GB。</span></label>
+      <label id="path-field" hidden>本地视频路径<input id="source-path" placeholder="例如 E:\videos\livingroom.mp4" autocomplete="off"><span class="field-note">填写运行本地服务的计算机上已有的视频路径。</span></label>
+      <label>初始任务 <span class="muted">可选</span><textarea id="new-instruction" rows="3" maxlength="12000" placeholder="例如：看关键帧，先构建客厅白模，等待我核对布局。"></textarea></label>
+      <p class="field-note">填写初始任务后，创建项目时即开始执行；留空则等待你在聊天中发送指令。</p>
+      <div id="upload-status" hidden><progress id="upload-progress" max="1" value="0"></progress><p id="upload-text" class="field-note"></p></div>
+      <p id="create-error" class="error" role="alert" hidden></p><button id="create-project" class="primary wide" type="submit">创建项目</button>
+    </form>
+  </dialog>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>

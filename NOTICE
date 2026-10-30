@@ -1,0 +1,14 @@
+Video2Scene
+Copyright 2026 Video2Scene contributors.
+
+Original project code is licensed under the Apache License, Version 2.0.
+Bundled third-party code retains its original license and notices:
+
+- Three.js r170, copyright 2010-2024 three.js authors, MIT.
+  See video2scene/editor_v1/vendor/three/LICENSE.
+- AHa-3D semantics subset, Apache-2.0.
+  See third_party/aha3d_semantics/README.md and LICENSE for source attribution.
+
+External programs, model weights, datasets and services are not relicensed by
+this distribution. See THIRD_PARTY_NOTICES.md for scope and source links.
+No affiliation with or endorsement by those upstream projects is implied.

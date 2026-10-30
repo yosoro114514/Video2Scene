@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "description": "Reviewed source export. Runtime data, credentials, models and historical reports are excluded.",
+  "include": [
+    "README.md", "README.en.md", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md",
+    "CONTRIBUTING.md", "SECURITY.md", "CHANGELOG.md", "PIPELINE.md", "RESULTS.md",
+    "pyproject.toml", "uv.lock", ".gitignore", ".gitattributes", "video2scene.example.toml", "release-manifest.json",
+    ".github/workflows/ci.yml", ".github/ISSUE_TEMPLATE/bug_report.yml", ".github/ISSUE_TEMPLATE/feature_request.yml",
+    ".github/pull_request_template.md",
+    "docs/README.md", "docs/INSTALLATION.md", "docs/CONFIGURATION.md", "docs/DEMO.md", "docs/ARCHITECTURE.md",
+    "docs/TROUBLESHOOTING.md", "docs/RELEASING.md", "docs/RELEASE_VALIDATION.md", "docs/ROADMAP.md", "docs/assets/demo.png",
+    "docs/WORKFLOW.md", "docs/MODELING_WORKFLOW.html", "docs/SHOWCASE.md", "docs/assets/livingroom-comparison.jpg", "docs/assets/livingroom-showcase.json",
+    "docs/development/contracts/v1.schema.json", "docs/development/contracts/examples.json", "docs/development/contracts/acceptance_cases.json",
+    "video2scene/**/*.py", "video2scene/**/*.json", "video2scene/**/*.html", "video2scene/**/*.mjs",
+    "video2scene/**/*.css", "video2scene/editor_v1/vendor/three/**/*.js", "video2scene/editor_v1/vendor/three/LICENSE",
+    "tests/**/*.py", "tests/**/*.mjs", "tests/**/*.cjs", "tests/package.json", "tests/package-lock.json",
+    "tools/pi-runtime/*.mjs", "tools/pi-runtime/package.json", "tools/pi-runtime/package-lock.json",
+    "examples/README.md",
+    "scripts/start_pi_workflow.ps1", "scripts/run_wsl.ps1", "scripts/run_wsl.sh", "scripts/run_vipe_workflow.sh",
+    "scripts/setup_wsl.sh", "scripts/patch_vipe_metadata.py", "scripts/prefetch_models.py", "scripts/with_scene_env.sh",
+    "scripts/prepare_release.py", "scripts/asset_backend/*.py", "scripts/validation_v1/prepare_critic.py",
+    "scripts/build_visual_review.py", "scripts/build_pipeline_blender.py", "scripts/refine_blender.py",
+    "scripts/render_direct_scene.py", "scripts/validate_refined_blender.py", "scripts/present_refinement.py",
+    "scripts/whitebox_loop_blender.py", "scripts/whitebox_fresh_prepare.py", "scripts/whitebox_asset_preview.py",
+    "scripts/simple_direct_blender_tools.py", "scripts/refine_scene_from_video.py",
+    "scripts/add_room_structure.py", "scripts/render_preview.py", "scripts/whitebox_web_export.py", "scripts/assess_spatiallm_control.py",
+    "experiments/redwood_v1/run_rgb_only.sh",
+    "third_party/aha3d_semantics/semantics.py", "third_party/aha3d_semantics/LICENSE", "third_party/aha3d_semantics/README.md"
+  ],
+  "exclude": ["**/__pycache__/**", "**/node_modules/**", "**/.git/**", "**/*.local.*", "tests/test_simple_table_eval.py"],
+  "max_file_bytes": 5242880
+}

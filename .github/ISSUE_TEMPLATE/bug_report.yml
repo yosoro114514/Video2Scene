@@ -1,0 +1,22 @@
+name: Bug report
+description: Report a reproducible problem
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python, Node, Blender, GPU, and source version. Do not include credentials.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps and expected behavior
+      description: Prefer the synthetic demo or a minimal shareable input.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Actual result and redacted error
+      description: Avoid raw conversations, auth files and private videos.

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Video2Scene · 场景工作台</title><link rel="stylesheet" href="./styles.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js"}}</script>
+</head>
+<body>
+  <header><a class="brand" href="./">Video2Scene<span>场景工作台</span></a><div class="head-meta"><span id="scene-name">连接场景</span><code id="revision">—</code><span class="status" id="connection">连接中</span></div><button id="refresh" class="quiet">刷新</button></header>
+  <main>
+    <section class="workspace">
+      <div class="toolbar"><div><span class="eyebrow">SCENE VIEW</span><h1>从证据到可编辑场景</h1></div><div class="view-actions"><button id="reset-camera" class="quiet">重置视角</button><label class="switch"><input id="show-assets" type="checkbox" checked> 显示可用精模</label></div></div>
+      <div id="viewer" aria-label="三维场景视图"><div class="viewer-hint" id="viewer-note">正在读取服务端场景…</div></div>
+      <div class="viewer-footer"><span id="object-count">0 个对象</span><span>拖动旋转 · 滚轮缩放 · 点击选择</span><span id="scale-status">米 / Y 向上</span></div>
+      <section class="evidence-panel"><div class="section-heading"><h2>源图证据</h2><select id="evidence-frame" aria-label="证据帧"><option>尚未选择</option></select></div><div class="evidence-content"><img id="evidence-image" alt="选中对象的原始图像证据" hidden><div id="evidence-empty" class="muted">选择对象以读取源图与相机证据。</div><div class="evidence-info"><span class="eyebrow" id="evidence-id">SOURCE FRAME</span><p id="evidence-details">图像与正式版本绑定。</p><p class="muted" id="evidence-reason"></p></div></div></section>
+    </section>
+    <aside>
+      <section class="card objects-card"><div class="section-heading"><h2>场景对象</h2><span class="pill" id="selection-count">选择一个对象</span></div><div id="objects" role="listbox" aria-label="场景对象"></div></section>
+      <section class="card"><div class="section-heading"><h2 id="selected-title">属性</h2><span id="asset-version" class="muted truncate"></span></div>
+        <form id="property-form"><fieldset id="property-fields" disabled><label>类别<input id="category" required autocomplete="off"></label><label>世界位置 · 米</label><div class="triple"><label>X<input id="position-x" type="number" step="any"></label><label>Y · 高度<input id="position-y" type="number" step="any"></label><label>Z<input id="position-z" type="number" step="any"></label></div><label>局部缩放 · 倍数</label><div class="triple"><label>X<input id="scale-x" type="number" min="0.001" step="any"></label><label>Y<input id="scale-y" type="number" min="0.001" step="any"></label><label>Z<input id="scale-z" type="number" min="0.001" step="any"></label></div><label>支撑对象<select id="support"></select></label><p id="lock-info" class="field-note"></p><div id="diff" class="diff" aria-live="polite">尚未修改</div><button id="save" type="submit" class="primary">保存修改</button></fieldset></form>
+        <div class="history-actions"><button id="undo" disabled>撤销</button><button id="redo" disabled>重做</button></div>
+      </section>
+      <section class="card"><div class="section-heading"><h2>告诉场景你想改什么</h2></div><form id="language-form"><label class="sr-only" for="language">修改指令</label><textarea id="language" rows="3" placeholder="例如：将杯子再增高 5%"></textarea><div class="command-options"><select id="intent" aria-label="修改目的"><option value="design_edit">设计修改</option><option value="reconstruction_correction">重建纠错</option></select><button id="send" class="primary" type="submit">发送</button></div></form><button id="refine" class="wide" disabled>精修选中对象的几何与材质</button><p class="field-note">精修保持根变换、支撑和边界；后台完成后通过验证再提交。</p></section>
+      <section class="card activity-card"><div class="section-heading"><h2>操作记录</h2><span class="muted">实时</span></div><div id="activity" role="log" aria-live="polite"><p class="muted">所有修改由服务端保存。</p></div><div id="jobs"></div></section>
+    </aside>
+  </main>
+  <div id="notice" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="./editor.mjs"></script>
+</body>
+</html>

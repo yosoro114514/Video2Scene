@@ -1,0 +1,166 @@
+{
+  "contract_version": "video2scene/1.0",
+  "schema_checks": "examples.json 的所有 positive 必须通过，negative 必须拒绝；下列行为项不能用 JSON Schema 通过替代。",
+  "behavior_cases": [
+    {
+      "id": "B01",
+      "name": "head_seq_aba",
+      "owner": "T01",
+      "trigger": "修改后撤销回 r000，使用旧 head_seq=0 提交",
+      "expected": "STALE_REVISION；head 与历史不变",
+      "status": "not_run"
+    },
+    {
+      "id": "B02",
+      "name": "idempotency",
+      "owner": "T01",
+      "trigger": "同一 request_id 相同内容发送两次",
+      "expected": "返回相同结果；无重复候选 / 提交",
+      "status": "not_run"
+    },
+    {
+      "id": "B03",
+      "name": "idempotency_conflict",
+      "owner": "T01",
+      "trigger": "相同 request_id 不同 edits",
+      "expected": "IDEMPOTENCY_CONFLICT",
+      "status": "not_run"
+    },
+    {
+      "id": "B04",
+      "name": "atomic_batch",
+      "owner": "T01",
+      "trigger": "一批两个 edit，第二项非法",
+      "expected": "整批拒绝；没有部分保存",
+      "status": "not_run"
+    },
+    {
+      "id": "B05",
+      "name": "scope_locks",
+      "owner": "T01",
+      "trigger": "模型写未授权锁定字段 / 伪造 decision_ref",
+      "expected": "FORBIDDEN_SCOPE 或 LOCKED_FIELD",
+      "status": "not_run"
+    },
+    {
+      "id": "B06",
+      "name": "support_graph",
+      "owner": "T01",
+      "trigger": "不存在的支撑或形成循环",
+      "expected": "CONSTRAINT_VIOLATION",
+      "status": "not_run"
+    },
+    {
+      "id": "B07",
+      "name": "coordinate_roundtrip",
+      "owner": "T02",
+      "trigger": "旧 Z-up / table-local 与标准 Y-up 往返",
+      "expected": "点位置、投影、相机方向一致，只有一次换轴",
+      "status": "not_run"
+    },
+    {
+      "id": "B08",
+      "name": "frame_alignment",
+      "owner": "T02",
+      "trigger": "相机、源图、mask 帧不匹配",
+      "expected": "FRAME_MISMATCH，不进入精修",
+      "status": "not_run"
+    },
+    {
+      "id": "B09",
+      "name": "asset_freshness",
+      "owner": "T03",
+      "trigger": "修改 object.py 后构建失败，留有旧 GLB",
+      "expected": "BUILD_FAILED / STALE_ARTIFACT，不能渲染旧资产当新结果",
+      "status": "not_run"
+    },
+    {
+      "id": "B10",
+      "name": "asset_scope",
+      "owner": "T03",
+      "trigger": "杯子精修后比较根 / 支撑 / 其他对象",
+      "expected": "授权范围内变化，其余保持；真实构建和重开",
+      "status": "not_run"
+    },
+    {
+      "id": "B11",
+      "name": "image_delivery",
+      "owner": "T04",
+      "trigger": "渲染工具返回 ArtifactRef",
+      "expected": "provider 接收图片内容与正确帧说明，不只有路径",
+      "status": "not_run"
+    },
+    {
+      "id": "B12",
+      "name": "stale_background",
+      "owner": "T04",
+      "trigger": "精修期间用户修改相关场景，再尝试提交",
+      "expected": "新 head 保留；旧候选 stale；job 成功不自动提交",
+      "status": "not_run"
+    },
+    {
+      "id": "B13",
+      "name": "cancel_race",
+      "owner": "T04",
+      "trigger": "运行中取消，同时 worker 完成",
+      "expected": "唯一持久终态；未确认中止前不报 cancelled",
+      "status": "not_run"
+    },
+    {
+      "id": "B14",
+      "name": "crash_after_commit",
+      "owner": "T01",
+      "trigger": "DB 提交成功、job 更新前崩溃",
+      "expected": "按原 request_id 找到提交结果，无第二次提交",
+      "status": "not_run"
+    },
+    {
+      "id": "B15",
+      "name": "intent_validation",
+      "owner": "T06",
+      "trigger": "用户设计移动杯子，与原图位置不同",
+      "expected": "按 design_edit 标准验证，不以旧照片位置直接否决",
+      "status": "not_run"
+    },
+    {
+      "id": "B16",
+      "name": "report_binding",
+      "owner": "T06",
+      "trigger": "用候选 A 的报告提交候选 B",
+      "expected": "拒绝候选 / hash / criteria 不匹配",
+      "status": "not_run"
+    },
+    {
+      "id": "B17",
+      "name": "ui_event_order",
+      "owner": "T05",
+      "trigger": "断线重连与重复 / 延迟事件",
+      "expected": "seq 去重；不把较旧 head 画成当前状态",
+      "status": "not_run"
+    },
+    {
+      "id": "B18",
+      "name": "relative_language",
+      "owner": "T04",
+      "trigger": "连续两次高度增加 5%，再给模糊位移",
+      "expected": "1.1025 倍；模糊指令澄清且无提交",
+      "status": "not_run"
+    },
+    {
+      "id": "B19",
+      "name": "capture_truth_separation",
+      "owner": "T07",
+      "trigger": "Redwood 只输入 RGB，后续可能取得真值",
+      "expected": "生成端无参考深度 / 位姿 / mesh；评估分离",
+      "status": "not_run"
+    },
+    {
+      "id": "B20",
+      "name": "real_closed_loop",
+      "owner": "T06",
+      "trigger": "网页修改 → 保存 → 新精模 → 检查 → 提交 → 重开",
+      "expected": "整个链路实际执行，有原图 / 构建 / 渲染 / 版本证据",
+      "status": "not_run"
+    }
+  ]
+}

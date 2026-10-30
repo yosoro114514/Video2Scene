@@ -1,0 +1,5 @@
+{
+  "name": "video2scene-browser-checks",
+  "private": true,
+  "devDependencies": {"playwright": "1.64.1"}
+}
