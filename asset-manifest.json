@@ -1,0 +1,47 @@
+{
+  "assets/livingroom-comparison.jpg": {
+    "bytes": 125676,
+    "sha256": "f92f8979991b94135a2a4495fca6e9d398cb14decbd3baada0e5e02e2f15e529",
+    "type": "image/jpeg"
+  },
+  "media/livingroom-comparison.mp4": {
+    "bytes": 8955957,
+    "sha256": "7f743c3fe4c00ffbf5b86bf448d81a4ff671a862d7ac9b2b88d500098ad978ef",
+    "type": "video/mp4"
+  },
+  "assets/layered-agent.drawio.svg": {
+    "bytes": 1304765,
+    "sha256": "81c2e17cd166921be196396f0d1c0d909917fdd8ed5142036ee1971a74a026a5",
+    "type": "image/svg+xml"
+  },
+  "assets/092f7348204a1264.jpg": {
+    "bytes": 95296,
+    "sha256": "092f7348204a126473657f68564105dd8c558a7f58961bcfd7395b6fb1107f93",
+    "type": "image/jpeg"
+  },
+  "assets/6cc8fe51b0044794.png": {
+    "bytes": 179933,
+    "sha256": "6cc8fe51b0044794431386a170dd678293461c334419e90e04a2eff5f6754b03",
+    "type": "image/png"
+  },
+  "assets/3b047aa8a5f18687.png": {
+    "bytes": 42107,
+    "sha256": "3b047aa8a5f186872f51aa4e0ea56473aa1d3b58e2a192aa0feb094dd5c9f739",
+    "type": "image/png"
+  },
+  "assets/33a03e544a911aea.png": {
+    "bytes": 4088,
+    "sha256": "33a03e544a911aeae63da235f0cdb2b9f965b373864dca0d6abc4221ef99b312",
+    "type": "image/png"
+  },
+  "assets/8892ba720a9ad97c.png": {
+    "bytes": 292990,
+    "sha256": "8892ba720a9ad97c68b56ff5a4ca940b15aaf0180c9ae9bacb2f2952c27b5c30",
+    "type": "image/png"
+  },
+  "assets/333b04981b938c6b.png": {
+    "bytes": 338489,
+    "sha256": "333b04981b938c6be9ff30e4218ae9f40defeb48f0d28561e991e1addf330a74",
+    "type": "image/png"
+  }
+}
